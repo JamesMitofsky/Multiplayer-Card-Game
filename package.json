@@ -1,0 +1,19 @@
+{
+  "name": "card-game-for-bryan",
+  "version": "1.0.0",
+  "description": "little app for family taskmaster",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesTedesco/Card-Game-For-Bryan.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamesTedesco/Card-Game-For-Bryan/issues"
+  },
+  "homepage": "https://github.com/JamesTedesco/Card-Game-For-Bryan#readme"
+}
