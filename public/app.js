@@ -146,7 +146,6 @@ async function recycleAllCards() {
 
     
 
-    location.reload()
 
     console.log('Cards Recycled: all cards are now available.')
 }

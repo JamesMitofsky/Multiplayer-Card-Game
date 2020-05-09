@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Firebase Hosting</title>
+  <title>Relative Insanity</title>
 
   <!-- update the version number as needed -->
   <script defer src="/__/firebase/7.14.2/firebase-app.js"></script>
@@ -18,12 +18,42 @@
   <script defer src="/__/firebase/init.js"></script>
 
   <style>
+    body {
+      height: 100vh;
+      margin: 0;
+    }
+
+    .header {
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+      background-color: #f9c2c2;
+      box-shadow: 0 0 11px 8px #9c5151;
+    }
+
+    .header h1 {
+      text-align: center;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 10px;
+    }
+
+    .buttons button {
+      width: fit-content;
+    }
+
+
+
     .card {
       margin: 30px auto;
       width: 300px;
       height: 300px;
       border-radius: 20px;
-      box-shadow: 5px 5px 15px 7px rgba(0, 0, 0, 0.25), -5px -5px 30px 7px rgba(0, 0, 0, 0.22);
+      box-shadow: 2px 2px 5px 3px rgba(105, 7, 7, 0.25), 7px 9px 20px 6px rgba(119, 109, 109, 0.22);
       display: flex;
       flex-direction: column;
       text-align: center;
@@ -88,9 +118,13 @@
 <!-- Being working on Bryan's app -->
 
 <body>
-  <h1>Bryan's Test Exists!</h1>
-  <button class="red-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
-  <button class="green-btn" onclick='returnNewCard()'>Deal New Card</button>
+  <div class="header">
+    <h1>Relative Insanity!</h1>
+    <div class="buttons">
+      <button class="red-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
+      <button class="green-btn" onclick='returnNewCard()'>Deal New Card</button>
+    </div>
+  </div>
 
   <button class='dev-only' onclick='writeCardsToDatabase()'>Write Cards to Database</button>
 
