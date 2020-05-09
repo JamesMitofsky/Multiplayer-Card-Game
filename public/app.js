@@ -2,15 +2,6 @@ document.addEventListener("DOMContentLoaded", event => {
 
     // window.alert('Welcome! Deal yourself a card!')
 
-    const db = firebase.firestore();
-
-    // find the collection
-    const allCards = db.collection('cardCollection');
-
-
-
-
-    // updateHeaderText(db)
 
 
 });
@@ -26,8 +17,7 @@ async function dealCard() {
     const allCards = db.collection('cardCollection');
 
     // make sure there are cards available
-    cardsRemaining(db)
-
+    await cardsRemaining(db)
 
     // limit the query so we only get one card
     let query = allCards.where('isUsed', '==', false).limit(1)
@@ -36,7 +26,6 @@ async function dealCard() {
     // await retrieving all cards
     let cards = await query.get()
 
-    console.log("Total unused cards:", cards.size)
 
 
 
@@ -97,26 +86,26 @@ function deleteCard(element) {
 
 
 async function recycleAllCards() {
+
     // access the database
     const db = firebase.firestore();
-
-    // find the collection
     const allCards = db.collection('cardCollection');
+    
 
-    let query = allCards.where('isUsed', '==', true)
+    // clear incrementor of cards in play
+    let incrementorDoc = await db.collection('incrementors').doc('cardsIncrementor').update({
+        currently_used: 0
+    })
 
-    let usedCards = await query.get()
+    let discardedCards = await db.collection('cardCollection').where('isUsed', '==', true).get()
 
-    usedCards.forEach(card => {
-        let data = card.data()
-
+    discardedCards.forEach(card => {
+     
         allCards.doc(card.id).update({
             isUsed: false
         })
 
     })
-
-    resetTheDeck(db)
 
 
 
@@ -124,25 +113,12 @@ async function recycleAllCards() {
 }
 
 
-async function resetTheDeck(db) {
-
-    // clear incrementor of cards in play
-    let incrementorDoc = await db.collection('incrementors').doc('cardsIncrementor').update({
-        currently_used: 0
-    })
-
-    let discardedCards = await db.collection('cardCollection').where('isUsed', '==', true)
-
-    discardedCards.forEach(card => {
-        
-        card.update({
-            isUsed: false
-        })
-
-    })
+// async function resetTheDeck(db) {
 
 
-}
+
+
+// }
 
 // check to make sure we haven't used the last card yet
 async function cardsRemaining(db) {
@@ -154,8 +130,9 @@ async function cardsRemaining(db) {
     let currentlyUsed = data.currently_used
     let totalDocs = data.total_documents
 
+    console.log(totalDocs - currentlyUsed, "remaining")
     if (currentlyUsed == totalDocs) {
-        recycleAllCards()
+        await recycleAllCards()
     }
 
    
@@ -163,37 +140,8 @@ async function cardsRemaining(db) {
 }
 
 
-// called from onChange event in the app, this sends input to database
-function updatePost(e) {
-    // calls database
-    const db = firebase.firestore();
-
-    // finds correct document
-    const myPost = db.collection('posts').doc('firstpost');
-
-    // sends the text input to the database
-    myPost.update({ title: e.target.value })
-}
 
 
-function googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    firebase.auth().signInWithPopup(provider).then(result => {
-
-        const user = result.user;
-        document.write(`Hello ${user.displayName}`)
-
-        console.log(user)
-
-    })
-
-
-
-}
-
-
-// one time execute to import CSV data
 
 
 
@@ -211,7 +159,13 @@ function changeActiveCardCount(number) {
         currently_used: changeByValue
     })
 
-    // testArray = ['proof']
+   
+}
+
+
+
+
+ // testArray = ['proof']
 
 
     // testArray.forEach(item => {
@@ -221,10 +175,3 @@ function changeActiveCardCount(number) {
 
     //     })
     // })
-
-    
-
-   
-
-
-}
