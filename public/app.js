@@ -28,7 +28,6 @@ async function dealCard() {
 
 
 
-
     cards.forEach(card => {
 
         // grab data from this card
@@ -55,7 +54,7 @@ async function dealCard() {
         cardElement.appendChild(dbContent)
 
         // push to the DOM
-        document.body.appendChild(cardElement)
+        document.getElementById('cards-wrapper').appendChild(cardElement)
 
         allCards.doc(card.id).update({
             isUsed: true
@@ -99,13 +98,25 @@ async function recycleAllCards() {
 
     let discardedCards = await db.collection('cardCollection').where('isUsed', '==', true).get()
 
+
+    
+    // declare batch group
+    let batch = db.batch()
+
+    // look for all old cards
     discardedCards.forEach(card => {
      
-        allCards.doc(card.id).update({
-            isUsed: false
-        })
+        // add this card to the batch queue
+        batch.update(allCards.doc(card.id), {isUsed: false})
+
+
+        // allCards.doc(card.id).update({
+        //     isUsed: false
+        // })
 
     })
+
+    await batch.commit()
 
 
 
