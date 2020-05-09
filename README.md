@@ -11,6 +11,10 @@ little app for family taskmaster
 - When writing, you can give documents specific names, but if you'd rather a [random serialization](https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document), use ```.add()``` rather than ```.doc().set()```. Behind the scenes, these are equivilent, but the latter lets you initialize a document in your code without necessarily having to write to it immediately.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
 
+
+## Queries
+- Executed following ```.where()``` with ```.get()```.
+
 **Tracking total number of records**
 - Counting every record is possible but very resource heavy. Instead, consider implimenting an [incrementor document](https://firebase.googleblog.com/2019/03/increment-server-side-cloud-firestore.html) which solely serves to track the total number of docs.
 
