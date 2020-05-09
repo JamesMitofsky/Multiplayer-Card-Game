@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", event => {
 
+    window.alert('Welcome! Deal yourself a card!')
 
     const db = firebase.firestore();
 
@@ -7,8 +8,6 @@ document.addEventListener("DOMContentLoaded", event => {
     const allCards = db.collection('cardCollection');
 
 
-    // on button press, get one new card
-    let singleCard = returnNewCard(allCards)
 
 
     // updateHeaderText(db)
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
 
 // gets cards which haven't yet been used
-async function returnNewCard() {
+async function dealCard() {
 
 
     const db = firebase.firestore();
