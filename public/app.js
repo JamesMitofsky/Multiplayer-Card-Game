@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", event => {
 
-    window.alert('Welcome! Deal yourself a card!')
+    // window.alert('Welcome! Deal yourself a card!')
 
     const db = firebase.firestore();
 
@@ -21,10 +21,12 @@ document.addEventListener("DOMContentLoaded", event => {
 async function dealCard() {
 
 
+    // open database
     const db = firebase.firestore();
-
-    // find the collection
     const allCards = db.collection('cardCollection');
+
+    // make sure there are cards available
+    cardsRemaining(db)
 
 
     // limit the query so we only get one card
@@ -70,6 +72,8 @@ async function dealCard() {
             isUsed: true
         })
 
+        changeActiveCardCount(1)
+
         console.log('Card drawn: marked as used.')
 
 
@@ -90,37 +94,6 @@ function deleteCard(element) {
 
 
 }
-
-// don't wanna change card on delete
-// async function lookForCard(cardText) {
-
-//     // access the database
-//     const db = firebase.firestore();
-
-//     // find the collection
-//     const allCards = db.collection('cardCollection');
-
-
-//     // look for this particular card
-//     let query = allCards.where('content', '==', cardText)
-
-//     // await retrieving all matching documents
-//     let dbCard = await query.get()
-
-//     // only expecting one document
-//     dbCard.forEach(card => {
-
-//         data = card.data()
-//         console.log('Card now marked as "Used":', data.content)
-        
-//         console.log(card.id)
-
-//         allCards.doc(card.id).update({
-//             isUsed: true
-//         })
-
-//     })
-// }
 
 
 async function recycleAllCards() {
@@ -143,23 +116,51 @@ async function recycleAllCards() {
 
     })
 
-    
+    resetTheDeck(db)
+
 
 
     console.log('Cards Recycled: all cards are now available.')
 }
 
 
-// function updateHeaderText(db) {
+async function resetTheDeck(db) {
 
-//     // grabs database document field and applies it to h2 tag
-//     const myPost = db.collection('posts').doc('firstpost');
-//     myPost.onSnapshot(doc => {
-//         console.log('detected change')
-//         const data = doc.data();
-//         document.querySelector('#title').innerHTML = data.title
-//     })
-// }
+    // clear incrementor of cards in play
+    let incrementorDoc = await db.collection('incrementors').doc('cardsIncrementor').update({
+        currently_used: 0
+    })
+
+    let discardedCards = await db.collection('cardCollection').where('isUsed', '==', true)
+
+    discardedCards.forEach(card => {
+        
+        card.update({
+            isUsed: false
+        })
+
+    })
+
+
+}
+
+// check to make sure we haven't used the last card yet
+async function cardsRemaining(db) {
+
+    let incrementorDoc = await db.collection('incrementors').doc('cardsIncrementor').get()
+
+    let data = incrementorDoc.data()
+
+    let currentlyUsed = data.currently_used
+    let totalDocs = data.total_documents
+
+    if (currentlyUsed == totalDocs) {
+        recycleAllCards()
+    }
+
+   
+
+}
 
 
 // called from onChange event in the app, this sends input to database
@@ -193,7 +194,10 @@ function googleLogin() {
 
 
 // one time execute to import CSV data
-function writeCardsToDatabase() {
+
+
+
+function changeActiveCardCount(number) {
 
     // get db resources
     const db = firebase.firestore();
@@ -201,12 +205,10 @@ function writeCardsToDatabase() {
     const incrementor = db.collection('incrementors').doc('cardsIncrementor');
 
     // set incrementor to 1
-    let increment = firebase.firestore.FieldValue.increment(1);
-
-
+    let changeByValue = firebase.firestore.FieldValue.increment(number);
 
     incrementor.update({
-        total_documents: increment
+        currently_used: changeByValue
     })
 
     // testArray = ['proof']
