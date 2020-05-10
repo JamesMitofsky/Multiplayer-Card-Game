@@ -151,6 +151,8 @@
 
     .judge-card h2 {
       margin: 10px 0;
+      margin-right: 10px;
+      display: inline-block;
     }
 
     .card p {
@@ -159,11 +161,22 @@
       text-align: left;
     }
 
+    .line {
+      height: 2px;
+      width: 100%;
+      background-color: white;
+    }
+
+    .current-judge {
+      display: inline-block;
+      font-size: 20px;
+    }
+
     @media only screen and (min-width: 1200px) {
-  .content-wrapper {
-    margin: 0 20%;
-  }
-}
+      .content-wrapper {
+        margin: 0 20%;
+      }
+    }
   </style>
 
 </head>
@@ -182,7 +195,21 @@
     <div id="cards-wrapper">
 
       <div class="card judge-card">
-        <h2>Judge Card!</h2>
+
+        <h2><label for="people">Judge:</label></h2>
+
+        <select id="select" class="current-judge" onchange="changeJudgeName(event)" id="people">
+          <option>Parker</option>
+          <option>Betsy</option>
+          <option>Ryan</option>
+          <option>Kyle</option>
+          <option>Bryan</option>
+          <option>James</option>          
+          <option>Beth</option>
+          <option>Angel</option>
+        </select>
+
+        <div class="line"></div>
         <p id="judge-card-content">We're fetching the content right now!</p>
       </div>
 

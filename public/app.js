@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // grab card from database
     currentJudgeCard()
 
+    getAdjudicator()
+
 
 
 
@@ -96,7 +98,7 @@ async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
     const db = firebase.firestore();
 
     // if called from HTML click, know it's recycling
-    if (typeof(element) != 'undefined' && element != null) {
+    if (typeof (element) != 'undefined' && element != null) {
         console.log('Recycle Function Called Manually')
         incrementorPath = db.collection('incrementors').doc('playerCardsIncrementor')
         cardCollectionPath = db.collection('playerCards')
@@ -180,7 +182,7 @@ async function updateJudgeCard() {
         })
 
         // increase incrementor TODO
-        
+
 
         let number = 1
         let incrementorLocation = db.collection('incrementors').doc('judgeCardsIncrementor')
@@ -256,8 +258,60 @@ function devTools() {
 }
 
 
+// send local value out to server
+function changeJudgeName(e) {
+
+    // open database
+    const db = firebase.firestore();
+
+    // make sure cards are available
+    let currentJudge = db.collection('incrementors').doc('currentJudge')
 
 
+    currentJudge.update({
+        current_judge: e.target.value
+    })
+
+    console.log('Sent out judge name-change')
+
+}
+
+
+function getAdjudicator() {
+
+    // open database
+    const db = firebase.firestore();
+    const judgeCards = db.collection('incrementors');
+
+
+    judgeCards.doc('currentJudge')
+        .onSnapshot(function (doc) {
+
+            let serverIndicatedJudge = doc.data().current_judge
+            console.log('Current judge indicated by server:', serverIndicatedJudge)
+
+            // document.getElementById('judge-card-content').innerText = activeCard
+
+
+
+
+            // read about this HTML select solution here: https://thisinterestsme.com/change-select-option-javascript/
+            let selectElement = document.getElementById('select');
+
+            let selectOptions = selectElement.options
+
+            for (var opt, j = 0; opt = selectOptions[j]; j++) {
+                //If the option of value is equal to the option we want to select.
+                if (opt.value == serverIndicatedJudge) {
+                    //Select the option and break out of the for loop.
+                    selectElement.selectedIndex = j;
+                    break;
+                }
+            }
+
+
+        })
+}
 
 
 
