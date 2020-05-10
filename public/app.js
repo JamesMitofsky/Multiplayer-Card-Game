@@ -197,7 +197,7 @@ async function cardsRemaining(db) {
 
     // compare fields
     let currentlyUsed = data.active_cards
-    let totalDocs = data.total_documents
+    let totalDocs = data.total_cards
     console.log(totalDocs - currentlyUsed, "cards before deck recycle")
 
     // if the total exceeds or matches the total number of saved docs, reset
