@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // window.alert('Welcome! Deal yourself a card!')
     // console.log('proof')
 
-
+    // grab card from database
     currentJudgeCard()
 
 
@@ -89,10 +89,19 @@ function deleteCard(element) {
 }
 
 // resets incrementors
-async function recycleAllCards(incrementorPath, cardCollectionPath) {
+async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
+
 
     // access the database
     const db = firebase.firestore();
+
+    // if called from HTML click, know it's recycling
+    if (typeof(element) != 'undefined' && element != null) {
+        console.log('Recycle Function Called Manually')
+        incrementorPath = db.collection('incrementors').doc('playerCardsIncrementor')
+        cardCollectionPath = db.collection('playerCards')
+    }
+
 
 
     // clear incrementor of cards in play
@@ -129,7 +138,7 @@ async function currentJudgeCard() {
 
 
     judgeCards.doc('currentJudgeCard')
-        .onSnapshot(function(doc) {
+        .onSnapshot(function (doc) {
             console.log('state change:', doc.data().active_judgeCard)
         })
 }
