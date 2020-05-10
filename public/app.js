@@ -142,7 +142,9 @@ async function cardsRemaining(db) {
     let totalDocs = data.total_documents
 
     console.log(totalDocs - currentlyUsed, "remaining")
-    if (currentlyUsed == totalDocs) {
+
+    // if the total exceeds or matches the total number of saved docs, reset
+    if (currentlyUsed >= totalDocs) {
         await recycleAllCards()
     }
 
