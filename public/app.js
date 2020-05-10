@@ -19,15 +19,15 @@ async function dealCard() {
 
     // open database
     const db = firebase.firestore();
-    const allCards = db.collection('playerCards');
 
-
-    // make sure there are cards available
-    await cardsRemaining(db)
+    // make sure cards are available
+    let incrementorPath = db.collection('incrementors').doc('playerCardsIncrementor')
+    let cardCollectionPath = db.collection('playerCards')
+    await cardsRemaining(incrementorPath, cardCollectionPath)
 
 
     // limit the query so we only get one card
-    let query = allCards.where('isUsed', '==', false).limit(1)
+    let query = cardCollectionPath.where('isUsed', '==', false).limit(1)
     // await retrieving all cards
     let cards = await query.get()
 
@@ -64,13 +64,12 @@ async function dealCard() {
         // push to the DOM
         document.getElementById('cards-wrapper').appendChild(cardElement)
 
-        allCards.doc(card.id).update({
+        cardCollectionPath.doc(card.id).update({
             isUsed: true
         })
 
         // assign location and plus minus value
-        let location = db.collection('incrementors').doc('playerCardsIncrementor')
-        changeCardCount(1, location)
+        changeCardCount(1, incrementorPath)
 
         console.log('Card drawn & marked used')
 
@@ -86,46 +85,33 @@ function deleteCard(element) {
     // get card text
     let cardText = element.nextElementSibling.textContent
 
-
-
     element.parentElement.remove()
-
-
 }
 
 // resets incrementors
-async function recycleAllCards() {
+async function recycleAllCards(incrementorPath, cardCollectionPath) {
 
     // access the database
     const db = firebase.firestore();
-    const allCards = db.collection('playerCards');
 
 
     // clear incrementor of cards in play
-    let incrementorDoc = await db.collection('incrementors').doc('playerCardsIncrementor').update({
+    let incrementorDoc = await incrementorPath.update({
         active_cards: 0
     })
 
-    let discardedCards = await db.collection('playerCards').where('isUsed', '==', true).get()
 
+    // get collection of all used cards
+    let discardedCards = await cardCollectionPath.where('isUsed', '==', true).get()
 
-
-    // declare batch group
+    // refresh discards, marking them as not used
     let batch = db.batch()
-
-    // look for all old cards
     discardedCards.forEach(card => {
 
         // add this card to the batch queue
-        batch.update(allCards.doc(card.id), { isUsed: false })
-
-
-        // allCards.doc(card.id).update({
-        //     isUsed: false
-        // })
+        batch.update(cardCollectionPath.doc(card.id), { isUsed: false })
 
     })
-
     await batch.commit()
 
 
@@ -136,9 +122,6 @@ async function recycleAllCards() {
 
 // purely listeners in here right now
 async function currentJudgeCard() {
-
-    console.log('inside snapshot')
-
 
     // open database
     const db = firebase.firestore();
@@ -155,7 +138,7 @@ async function currentJudgeCard() {
 
 
 
-// actively retrieves new card
+// button click: actively retrieves new card
 async function updateJudgeCard() {
 
     // open database
@@ -178,6 +161,9 @@ async function updateJudgeCard() {
             active_judgeCard: judgeCardContent
         })
 
+        // update incrementor
+        db.collection('incrementors').doc('judgeCardsIncrementor')
+
         // finally, move this card to the used group
         judgeCards.doc(card.id).update({
             isUsed: true
@@ -189,9 +175,9 @@ async function updateJudgeCard() {
 
 
 // increment card total counter --> recycle if necessary
-async function cardsRemaining(db) {
+async function cardsRemaining(incrementorPath, cardCollectionPath) {
 
-    let incrementorDoc = await db.collection('incrementors').doc('playerCardsIncrementor').get()
+    let incrementorDoc = await incrementorPath.get()
     // get document so we can read all fields
     let data = incrementorDoc.data()
 
@@ -202,7 +188,7 @@ async function cardsRemaining(db) {
 
     // if the total exceeds or matches the total number of saved docs, reset
     if (currentlyUsed >= totalDocs) {
-        await recycleAllCards()
+        await recycleAllCards(incrementorPath, cardCollectionPath)
     }
 
 
