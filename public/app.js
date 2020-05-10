@@ -63,7 +63,7 @@ async function dealCard() {
         })
 
         // assign location and plus minus value
-        let location = db.collection('incrementors').doc('playerplayerCardsIncrementor')
+        let location = db.collection('incrementors').doc('playerCardsIncrementor')
         changeCardCount(1, location)
 
         console.log('Card drawn & marked used')
