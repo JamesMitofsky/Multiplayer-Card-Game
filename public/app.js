@@ -3,7 +3,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // window.alert('Welcome! Deal yourself a card!')
     // console.log('proof')
 
-    // countCards()
+
+    currentJudgeCard()
+
+
+
 
 });
 
@@ -128,6 +132,59 @@ async function recycleAllCards() {
 
     console.log('Cards Recycled: all cards are now available.')
 }
+
+
+// purely listeners in here right now
+async function currentJudgeCard() {
+
+    console.log('inside snapshot')
+
+
+    // open database
+    const db = firebase.firestore();
+    const judgeCards = db.collection('judgeCards');
+
+
+    judgeCards.doc('currentJudgeCard')
+        .onSnapshot(function(doc) {
+            console.log('state change:', doc.data().active_judgeCard)
+        })
+}
+
+
+
+
+
+// actively retrieves new card
+async function updateJudgeCard() {
+
+    // open database
+    const db = firebase.firestore();
+    const judgeCards = db.collection('judgeCards');
+
+
+    // on click, get new judge card --> write document ID to incrementor list so we can read that to everyone
+    let dbCards = await judgeCards.where('isUsed', '==', false).limit(1).get()
+    // start loop to access document
+    dbCards.forEach(card => {
+
+        // temp console log
+        console.log('new card', card.data().content)
+
+
+        // copy this card's content to the ACTIVE card document
+        let judgeCardContent = card.data().content
+        judgeCards.doc('currentJudgeCard').set({
+            active_judgeCard: judgeCardContent
+        })
+
+        // finally, move this card to the used group
+        judgeCards.doc(card.id).update({
+            isUsed: true
+        })
+    })
+}
+
 
 
 
