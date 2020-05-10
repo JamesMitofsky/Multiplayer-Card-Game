@@ -47,7 +47,9 @@ async function dealCard() {
         let deleteButton = document.createElement('div')
         deleteButton.classList.add('delete-button')
         deleteButton.setAttribute('onclick', 'deleteCard(this)')
-        deleteButton.innerText = "❌"
+        let innerDeleteButton = document.createElement('span')
+        innerDeleteButton.innerText = 'x'
+        deleteButton.appendChild(innerDeleteButton)
 
         // add data to the card wrapper
         cardElement.appendChild(deleteButton)
