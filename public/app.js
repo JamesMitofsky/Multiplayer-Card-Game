@@ -224,13 +224,24 @@ function changeCardCount(number, incrementorLocation) {
 
 
 function devTools() {
-    let recycleBtn = document.getElementById('recycle-btn')
 
+    // handle recycle button
+    let recycleBtn = document.getElementById('recycle-btn')
     if (recycleBtn.style.display == 'none') {
         recycleBtn.style.display = 'block'
     } else {
         recycleBtn.style.display = 'none'
     }
+
+    // handle judge card button
+    let judgeCardBtn = document.getElementById('judge-card-btn')
+    if (judgeCardBtn.style.display == 'none') {
+        judgeCardBtn.style.display = 'block'
+    } else {
+        judgeCardBtn.style.display = 'none'
+    }
+
+
 }
 
 

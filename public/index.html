@@ -93,14 +93,27 @@
 
     .recycle-btn {
       background-color: red;
+      /* hidden dev tool */
       display: none;
     }
 
 
-    button.dev-tools-access {
+    .dev-tools-wrapper {
       position: absolute;
       bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .dev-tools-btn {
       background-color: orange;
+    }
+
+    .judge-card-updater {
+      background-color: #2196F3;
+      /* hidden dev tool */
+      display: none;
     }
 
 
@@ -138,16 +151,17 @@
 
 <body>
   <div class="header">
-    <button class="recycle-btn" id="recycle-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
     <h1>Relative Insanity!</h1>
     <button class="green-btn" onclick='dealCard()'>Deal New Card</button>
   </div>
 
-  <button onclick="updateJudgeCard()">Update Judge Card</button>
 
   <div id="cards-wrapper"></div>
-
-  <button class="dev-tools-access" onclick='devTools()'>Dev Tools</button>
+  <div class="dev-tools-wrapper">
+    <button class="dev-tools-btn" onclick='devTools()'>Dev Tools</button>
+    <button class="recycle-btn" id="recycle-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
+    <button class="judge-card-updater" id="judge-card-btn" onclick="updateJudgeCard()">Update Judge Card</button>
+  </div>
 
 
   <!-- <button onclick="googleLogin()">

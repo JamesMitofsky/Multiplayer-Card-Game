@@ -7,7 +7,7 @@ little app for family taskmaster
 
 
 
-## Write & Read
+## Writing Data
 - When writing, you can give documents specific names, but if you'd rather a [random serialization](https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document), use ```.add()``` rather than ```.doc().set()```. Behind the scenes, these are equivilent, but the latter lets you initialize a document in your code without necessarily having to write to it immediately.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
 - **doc.update() is not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request. 
@@ -18,7 +18,7 @@ little app for family taskmaster
 
 
 ## Queries
-- Executed following ```.where()``` with ```.get()```.
+- All queries to locate by evaluation are done with ```.where()``` and must be followed by ```.get()``` to contact the server. This second method returns a promise, so be sure to await it.
 
 **Tracking total number of records**
 - Counting every record is possible but very resource heavy. Instead, consider implimenting an [incrementor document](https://firebase.googleblog.com/2019/03/increment-server-side-cloud-firestore.html) which solely serves to track the total number of docs.
