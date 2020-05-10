@@ -19,8 +19,9 @@
 
   <style>
     body {
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
+      position: relative;
     }
 
     .header {
@@ -78,6 +79,10 @@
       margin: 2px
     }
 
+    button:hover {
+      cursor: pointer;
+    }
+
     button:active {
       border: solid white;
     }
@@ -86,8 +91,16 @@
       background-color: green;
     }
 
-    .red-btn {
+    .recycle-btn {
       background-color: red;
+      display: none;
+    }
+
+
+    button.dev-tools-access {
+      position: absolute;
+      bottom: 0;
+      background-color: orange;
     }
 
 
@@ -125,12 +138,14 @@
 
 <body>
   <div class="header">
-    <button class="red-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
+    <button class="recycle-btn" id="recycle-btn" onclick='recycleAllCards()'>Recycle All Cards</button>
     <h1>Relative Insanity!</h1>
     <button class="green-btn" onclick='dealCard()'>Deal New Card</button>
   </div>
 
   <div id="cards-wrapper"></div>
+
+  <button class="dev-tools-access" onclick='devTools()'>Dev Tools</button>
 
 
   <!-- <button onclick="googleLogin()">

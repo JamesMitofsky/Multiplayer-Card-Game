@@ -1,7 +1,9 @@
-document.addEventListener("DOMContentLoaded", event => {
+document.addEventListener("DOMContentLoaded", async (event) => {
 
     // window.alert('Welcome! Deal yourself a card!')
+    // console.log('proof')
 
+    // countCards()
 
 });
 
@@ -97,7 +99,7 @@ async function recycleAllCards() {
 
     // clear incrementor of cards in play
     let incrementorDoc = await db.collection('incrementors').doc('playerCardsIncrementor').update({
-        currently_used: 0
+        active_cards: 0
     })
 
     let discardedCards = await db.collection('playerCards').where('isUsed', '==', true).get()
@@ -137,7 +139,7 @@ async function cardsRemaining(db) {
     let data = incrementorDoc.data()
 
     // compare fields
-    let currentlyUsed = data.currently_used
+    let currentlyUsed = data.active_cards
     let totalDocs = data.total_documents
     console.log(totalDocs - currentlyUsed, "cards before deck recycle")
 
@@ -151,11 +153,6 @@ async function cardsRemaining(db) {
 }
 
 
-
-
-
-
-
 function changeCardCount(number, incrementorLocation) {
 
     // set incrementor to 1
@@ -167,6 +164,37 @@ function changeCardCount(number, incrementorLocation) {
 
 
 }
+
+
+function devTools() {
+    let recycleBtn = document.getElementById('recycle-btn')
+
+    if (recycleBtn.style.display == 'none') {
+        recycleBtn.style.display = 'block'
+    } else {
+        recycleBtn.style.display = 'none'
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// UNENROLLED FUNCTIONS BELOW -------------------------------------------------------------------------------------------------------
 
 
 async function loadExelValues() {
@@ -524,11 +552,6 @@ async function loadExelValues() {
             isUsed: false,
         })
 
-        // Replacing this with: collection.size
-        // let incrementorLocation = db.collection('incrementors').doc('playerplayerCardsIncrementor')
-        // let changeByValue = firebase.firestore.FieldValue.increment(1);
-        // batch.update(incrementorLocation, { total_cards: changeByValue })
-
 
 
     })
@@ -542,5 +565,21 @@ async function loadExelValues() {
 
 }
 
+
+// identifies used card quantity
+async function countCards() {
+
+    // open database
+    const db = firebase.firestore();
+    const allCards = db.collection('playerCards');
+
+    console.log('proof')
+
+    let query = allCards.where('isUsed', '==', true)
+    // await retrieving all cards
+    let cards = await query.get()
+
+    console.log(cards.size)
+}
 
 

@@ -13,6 +13,9 @@ little app for family taskmaster
 - **doc.update() is not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request. 
 - Batching is important to avoid inconsistent data through multiple access points. If two people are trying to reach two data groups which should experience simultanious state changes, batch these to avoid confusion.
 
+## Initial Data Import
+- If you have to import data before handling normal user requests, it's worth knowing Firestore's free tier is limited to 500 writes per request. Each field edit is considered a write.
+
 
 ## Queries
 - Executed following ```.where()``` with ```.get()```.
