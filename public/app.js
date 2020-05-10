@@ -125,11 +125,11 @@ async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
 
 
 
-    console.log('Cards Recycled: all cards are now available.')
+    console.log('Recycled: all cards are now available.')
 }
 
 
-// purely listeners in here right now
+// purely listens to database for new card
 async function currentJudgeCard() {
 
     // open database
@@ -139,7 +139,9 @@ async function currentJudgeCard() {
 
     judgeCards.doc('currentJudgeCard')
         .onSnapshot(function (doc) {
-            console.log('state change:', doc.data().active_judgeCard)
+            let activeCard = doc.data().active_judgeCard
+            console.log('Judge-Card updated:', activeCard)
+            document.getElementById('judge-card-content').innerText = activeCard
         })
 }
 
@@ -152,7 +154,14 @@ async function updateJudgeCard() {
 
     // open database
     const db = firebase.firestore();
-    const judgeCards = db.collection('judgeCards');
+
+    // before we enter a loop, make sure there's at least one new card
+    // make sure cards are available
+    let incrementorPath = db.collection('incrementors').doc('judgeCardsIncrementor')
+    let judgeCards = db.collection('judgeCards');
+    await cardsRemaining(incrementorPath, judgeCards)
+
+
 
 
     // on click, get new judge card --> write document ID to incrementor list so we can read that to everyone
@@ -161,17 +170,24 @@ async function updateJudgeCard() {
     dbCards.forEach(card => {
 
         // temp console log
-        console.log('new card', card.data().content)
+        console.log('Local request for a new card:', card.data().content)
 
 
-        // copy this card's content to the ACTIVE card document
+        // copy card's content to the single doc which transiently holds this active content
         let judgeCardContent = card.data().content
         judgeCards.doc('currentJudgeCard').set({
             active_judgeCard: judgeCardContent
         })
 
-        // update incrementor
-        db.collection('incrementors').doc('judgeCardsIncrementor')
+        // increase incrementor TODO
+        
+
+        let number = 1
+        let incrementorLocation = db.collection('incrementors').doc('judgeCardsIncrementor')
+        changeCardCount(number, incrementorLocation)
+
+
+
 
         // finally, move this card to the used group
         judgeCards.doc(card.id).update({
