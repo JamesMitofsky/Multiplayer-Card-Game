@@ -92,6 +92,8 @@ async function dealCard(numOfCards) {
 }
 
 
+
+// called by HTML 'x' element which lives on every card
 function deleteCard(element) {
     console.log('Detected: delete click!')
 
@@ -99,7 +101,16 @@ function deleteCard(element) {
     let cardText = element.nextElementSibling.textContent
 
     element.parentElement.remove()
+
+
+    // deal new card when you delete one
+    let numOfCards = 1
+    dealCard(numOfCards)
+
 }
+
+
+
 
 // resets incrementors
 async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
