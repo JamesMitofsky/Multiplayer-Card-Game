@@ -4,14 +4,18 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // console.log('proof')
 
     // grab card from database
-    currentJudgeCard()
+    listenToJudgeCard()
 
     // check for state change of current judge
-    getAdjudicator()
+    listenToJudge()
 
     // auto deal 5 cards
     let numOfCards = 5
     dealCard(numOfCards)
+
+
+    // listen for submitted cards
+    listenForSubmitted()
 
 
 
@@ -83,29 +87,28 @@ async function dealCard(numOfCards) {
 
 
         let pathOfThisCard = cardCollectionPath.doc(card.id)
-        
-        batch.update(pathOfThisCard, {'isUsed': true })
+
+        batch.update(pathOfThisCard, { 'isUsed': true })
 
         // assign location and plus minus value
         changeCardCount(1, incrementorPath)
 
-        console.log('Card drawn & marked used')
 
 
     })
-    
+
     await batch.commit()
 
 }
 
 
 
-// called by HTML 'x' element which lives on every card
+// deletes the parent of the given element
 function deleteCard(element) {
 
     element.parentElement.remove()
 
-    
+
     console.log('This card has been deleted:', element.parentElement)
 
 
@@ -160,7 +163,7 @@ async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
 
 
 // purely listens to database for new card
-async function currentJudgeCard() {
+async function listenToJudgeCard() {
 
     // open database
     const db = firebase.firestore();
@@ -200,7 +203,7 @@ async function updateJudgeCard() {
     dbCards.forEach(card => {
 
         // temp console log
-        console.log('Local request for a new card:', card.data().content)
+        console.log('Local request for a new judge card:', card.data().content)
 
 
         // copy card's content to the single doc which transiently holds this active content
@@ -303,12 +306,12 @@ function changeJudgeName(e) {
         current_judge: e.target.value
     })
 
-    console.log('Sent out judge name-change')
+    console.log('Sent out judge name change')
 
 }
 
 
-function getAdjudicator() {
+function listenToJudge() {
 
     // open database
     const db = firebase.firestore();
@@ -345,6 +348,36 @@ function getAdjudicator() {
 }
 
 
+function listenForSubmitted() {
+    // open database
+    const db = firebase.firestore();
+    const submittedCards = db.collection('submittedCards');
+
+
+    // order by field, avoiding preserver document
+    submittedCards.orderBy('timestamp', 'desc').limit(1)
+        .onSnapshot(function (querySnapshot) {
+
+            querySnapshot.forEach(doc => {
+
+                // get document content
+                let newCardFromServer = doc.data().submitted_content
+
+                console.log('New Check')
+                console.log(doc.data().timestamp, newCardFromServer)
+
+
+            })
+
+
+        })
+
+
+
+
+}
+
+
 
 
 // called by submit button click
@@ -353,13 +386,14 @@ async function submitThisCard(submitButton) {
     // get submission text
     let cardContent = submitButton.previousElementSibling.innerText
 
-    
+
     // send this submission to the server
     const db = firebase.firestore();
     let submittedCollection = db.collection('submittedCards')
 
     submittedCollection.add({
-        submitted_content: cardContent
+        submitted_content: cardContent,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
 
     // after submitting, delete the card
@@ -386,7 +420,7 @@ async function deletePlayerSubmissions(db) {
 
         // if card is not collection preserver, delete it
         if (submission.id != 'preserveCollection') {
-            batch.delete(collectionPath.doc(submission.id))        
+            batch.delete(collectionPath.doc(submission.id))
         }
 
     })
