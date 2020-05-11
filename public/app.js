@@ -188,9 +188,10 @@ async function listenToJudgeCard() {
 async function updateJudgeCard() {
 
 
-    // responsively changes view, but there is a flash of unstyled content
+    // return to main view
     console.log('View change: personal deck')
-    document.getElementById('content-wrapper').style.marginLeft = '0'
+    document.getElementById('submitted-cards-wrapper').classList.remove('submission-enter')
+    document.getElementById('cards-wrapper').classList.remove('wrapper-leave')
 
 
     // open database
@@ -426,9 +427,11 @@ async function submitThisCard(submitButton) {
     deleteCard(submitButton)
 
 
-    // finally, load the element which displays all new cards
+    // switch to submitted cards view
     console.log('View change: submitted cards')
-    document.getElementById('content-wrapper').style.marginLeft = '-100vw'
+    document.getElementById('submitted-cards-wrapper').classList.add('submission-enter')
+    document.getElementById('cards-wrapper').classList.add('wrapper-leave')
+
 
 
 }
