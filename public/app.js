@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     dealCard(numOfCards)
 
 
+    // not at top level
+    console.log('top level')
     // listen for submitted cards
     listenForSubmitted()
 
@@ -353,26 +355,50 @@ function listenForSubmitted() {
     const db = firebase.firestore();
     const submittedCards = db.collection('submittedCards');
 
+    // not just inside this listen function
+    console.log('just inside listening function')
 
-    // order by field, avoiding preserver document
+
+    // TODO: Remove internal timestamp sort
+
+    // order by field, avoiding preserver document, and limit to 1 so only the latest submission is sent
     submittedCards.orderBy('timestamp', 'desc').limit(1)
         .onSnapshot(function (querySnapshot) {
 
             querySnapshot.forEach(doc => {
 
-                // get document content
+                // get content of this latest submission
                 let newCardFromServer = doc.data().submitted_content
 
-                console.log('New Check')
-                console.log(doc.data().timestamp, newCardFromServer)
-
+                // send latest submission to the app
+                renderSubmission(newCardFromServer)
 
             })
 
 
         })
+}
 
 
+
+// send latest submission to the app
+function renderSubmission(submittedContentFromServer) {
+
+
+    // style element as card
+    let cardElement = document.createElement('div')
+    cardElement.classList.add('card')
+
+
+    // set card content with database
+    let dbContent = document.createElement('p')
+    dbContent.innerText = submittedContentFromServer
+
+    // add content to card
+    cardElement.appendChild(dbContent)
+
+    // push to the DOM
+    document.getElementById('submitted-cards').appendChild(cardElement)
 
 
 }
@@ -393,16 +419,15 @@ async function submitThisCard(submitButton) {
 
     submittedCollection.add({
         submitted_content: cardContent,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        timestamp: new Date().getTime()
     })
 
     // after submitting, delete the card
     deleteCard(submitButton)
 
-    // deleteCard(cardElement)
-
 
     // finally, load the element which displays all new cards
+    // TODO
 
 
 }
@@ -410,11 +435,12 @@ async function submitThisCard(submitButton) {
 // delete all player submissions
 async function deletePlayerSubmissions(db) {
 
+    // declare path & object
     let collectionPath = db.collection('submittedCards')
     let submittedCollection = await collectionPath.get()
 
 
-    // trash used cards
+    // remove cards from server
     let batch = db.batch()
     submittedCollection.forEach(submission => {
 
@@ -425,6 +451,12 @@ async function deletePlayerSubmissions(db) {
 
     })
     await batch.commit()
+
+
+
+    // also delete submissions from the browser
+    let submissionContainer = document.getElementById('submitted-cards')
+    submissionContainer.innerHTML = ''
 
     console.log('All player submissions have been deleted.')
 

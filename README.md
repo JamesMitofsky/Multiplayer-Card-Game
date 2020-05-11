@@ -29,6 +29,7 @@ Caution: This almost goes without saying, but when batching, be sure to declare 
 - Only the documents containing a specific field can be accessed using the ```.orderBy()``` method.
 **Order by time**
 - You can access timestamp documents using Firebase's internal clock by invoking ```firebase.firestore.FieldValue.serverTimestamp()```. Then, you can serve the most recently added document through ```.orderBy('TIME_FIELD_NAME', desc)```. This is especially powerful when paired with ```.limit(1)```, serving up only the very most recent change.
+- Be warned, though! The serverTimestamp takes a moment to run, meaning any snapshot listening to that data will run twice! Explanation from [Stack Overflow](https://stackoverflow.com/questions/49972173/firestore-onsnapshot-executing-twice).
 
 ### Collections
 - Will not continue to exist if empty. There must always be at least one document, in the same way each document must always have at least one field.
