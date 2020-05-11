@@ -71,7 +71,7 @@ button:hover {
 }
 
 button:active {
-    border: solid white;
+    border: .16em solid white;
 }
 
 .recycle-btn {
