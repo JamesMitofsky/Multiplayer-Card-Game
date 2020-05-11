@@ -182,6 +182,9 @@ async function listenToJudgeCard() {
             console.log('View change: personal deck')
             showPlayerCards()
 
+            // delete all player submissions
+            deletePlayerSubmissions(db)
+
         })
 }
 
@@ -212,7 +215,7 @@ async function updateJudgeCard() {
 
 
 
-       
+
         // copy card's content to the single doc which transiently holds this active content
         let judgeCardContent = card.data().content
         judgeCards.doc('currentJudgeCard').set({
@@ -233,8 +236,6 @@ async function updateJudgeCard() {
         })
 
 
-        // delete all player submissions
-        deletePlayerSubmissions(db)
 
     })
 }
