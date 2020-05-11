@@ -1,9 +1,12 @@
-
+html {
+    overflow: hidden;
+}
+  
+  
   body {
     min-height: 100vh;
     margin: 0;
     position: relative;
-    overflow: hidden;
   }
 
 
@@ -164,6 +167,11 @@
     margin: 10px 0;
     margin-right: 10px;
     display: inline-block;
+  }
+
+  .submitted-cards-wrapper h2 {
+      text-align: center;
+      margin: 35px 0;
   }
 
   .card p {
