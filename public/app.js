@@ -53,12 +53,12 @@ async function dealCard(numOfCards) {
         cardElement.classList.add('card')
 
 
-        // get db information
+        // create database content element
         let dbContent = document.createElement('p')
         dbContent.innerText = data.content
 
 
-        // create delete button
+        // create delete button element
         let deleteButton = document.createElement('div')
         deleteButton.classList.add('delete-button')
         deleteButton.setAttribute('onclick', 'deleteCard(this)')
@@ -66,9 +66,15 @@ async function dealCard(numOfCards) {
         innerDeleteButton.innerText = 'x'
         deleteButton.appendChild(innerDeleteButton)
 
+        // create submit button element
+        let submitButton = document.createElement('button')
+        submitButton.classList.add('submit-btn')
+        submitButton.innerText = 'Submit!'
+
         // add data to the card wrapper
         cardElement.appendChild(deleteButton)
         cardElement.appendChild(dbContent)
+        cardElement.appendChild(submitButton)
 
         // push to the DOM
         document.getElementById('cards-wrapper').appendChild(cardElement)
