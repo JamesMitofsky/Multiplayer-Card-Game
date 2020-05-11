@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     dealCard(numOfCards)
 
 
-    // not at top level
-    console.log('top level')
     // listen for submitted cards
     listenForSubmitted()
 
@@ -174,6 +172,8 @@ async function listenToJudgeCard() {
 
     judgeCards.doc('currentJudgeCard')
         .onSnapshot(function (doc) {
+
+            // write new database value to website card
             let activeCard = doc.data().active_judgeCard
             console.log('Judge-Card updated:', activeCard)
             document.getElementById('judge-card-content').innerText = activeCard
@@ -186,6 +186,12 @@ async function listenToJudgeCard() {
 
 // button click: actively retrieves new card
 async function updateJudgeCard() {
+
+
+    // responsively changes view, but there is a flash of unstyled content
+    console.log('View change: personal deck')
+    document.getElementById('content-wrapper').style.marginLeft = '0'
+
 
     // open database
     const db = firebase.firestore();
@@ -214,9 +220,8 @@ async function updateJudgeCard() {
             active_judgeCard: judgeCardContent
         })
 
-        // increase incrementor TODO
 
-
+        // increment current active judge card counter
         let number = 1
         let incrementorLocation = db.collection('incrementors').doc('judgeCardsIncrementor')
         changeCardCount(number, incrementorLocation)
@@ -355,11 +360,6 @@ function listenForSubmitted() {
     const db = firebase.firestore();
     const submittedCards = db.collection('submittedCards');
 
-    // not just inside this listen function
-    console.log('just inside listening function')
-
-
-    // TODO: Remove internal timestamp sort
 
     // order by field, avoiding preserver document, and limit to 1 so only the latest submission is sent
     submittedCards.orderBy('timestamp', 'desc').limit(1)
@@ -427,7 +427,8 @@ async function submitThisCard(submitButton) {
 
 
     // finally, load the element which displays all new cards
-    // TODO
+    console.log('View change: submitted cards')
+    document.getElementById('content-wrapper').style.marginLeft = '-100vw'
 
 
 }
