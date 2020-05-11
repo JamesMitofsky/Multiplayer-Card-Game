@@ -191,7 +191,7 @@ button:active {
 .dotted-line {
     width : 100%;
     height: 1px;
-    border: 2px dashed black;
+    border: 2px dotted black;
 }
 
 .current-judge {
