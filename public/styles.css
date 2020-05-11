@@ -28,7 +28,7 @@ body {
 
 /* button styles */
 .delete-button {
-    background   : #eb0d0d;
+    background   : #f44336;
     color        : #fff;
     font-family  : 'Helvetica', 'Arial', sans-serif;
     font-size    : 1.2em;
@@ -74,10 +74,6 @@ button:active {
     border: solid white;
 }
 
-.green-btn {
-    background-color: green;
-}
-
 .recycle-btn {
     background-color: red;
     display         : none;
@@ -95,6 +91,7 @@ button:active {
 
 .submit-btn {
     background-color: green;
+    font-weight: bolder;
     margin          : 0;
     width           : fit-content;
     align-self      : flex-end;
@@ -116,14 +113,23 @@ button:active {
     justify-content: space-between;
 }
 
-#content-wrapper {
-    display: flex;
-    flex-direction: column;
+
+#submitted-cards-wrapper {
+    display: none;
 }
 
-.submissions-on-top {
-    flex-direction: column-reverse !important;
+
+/* javascript applied styles */
+.reveal-element {
+    display: block !important;
 }
+
+.hide-element {
+    display: none !important;
+}
+/* end js applied styles */
+
+
 
 
 @media only screen and (min-width: 1200px) {
@@ -134,17 +140,13 @@ button:active {
 
 
 
-
-
 /* cards styles */
 
 .cards-container {
-    margin-top     : 30px;
     /* flexbox below */
     display        : flex;
     justify-content: space-around;
     flex-wrap      : wrap;
-    width          : 100vw;
     transition     : all .4s ease;
 }
 
@@ -162,26 +164,18 @@ button:active {
     justify-content: space-between;
 }
 
-.judge-card {
+
+/* judge styles: */
+#judge-card {
     background-color: black;
     color           : white;
+    margin          : 30px auto;
 }
 
-.judge-card h2 {
+#judge-card h2 {
     margin      : 10px 0;
     margin-right: 10px;
     display     : inline-block;
-}
-
-#submitted-cards-wrapper h2 {
-    text-align: center;
-    margin    : 35px 0;
-}
-
-.card p {
-    margin    : 5px 10px;
-    font-size : 30px;
-    text-align: left;
 }
 
 .line {
@@ -194,5 +188,25 @@ button:active {
     display  : inline-block;
     font-size: 20px;
 }
+
+.user-is-judge {
+    color      : white;
+    background-color: green;    
+    font-weight: bolder;
+}
+
+
+/* Misc styles: */
+#submitted-cards-wrapper h2 {
+    text-align: center;
+    margin    : 35px 0;
+}
+
+.card p {
+    margin    : 5px 10px;
+    font-size : 30px;
+    text-align: left;
+}
+
 
 

@@ -169,7 +169,7 @@ async function listenToJudgeCard() {
     const db = firebase.firestore();
     const judgeCards = db.collection('judgeCards');
 
-
+    // if there's a new card, load it
     judgeCards.doc('currentJudgeCard')
         .onSnapshot(function (doc) {
 
@@ -178,10 +178,9 @@ async function listenToJudgeCard() {
             console.log('Judge-Card updated:', activeCard)
             document.getElementById('judge-card-content').innerText = activeCard
 
-
-
             // return to main view
             console.log('View change: personal deck')
+            showPlayerCards()
 
         })
 }
@@ -240,6 +239,31 @@ async function updateJudgeCard() {
     })
 }
 
+// user is judge --> click event
+function userIsJudge() {
+
+    showSubmissions()
+
+}
+
+// view change
+function showSubmissions() {
+
+    console.log('View change: submitted cards')
+    // show submissions
+    document.getElementById('submitted-cards-wrapper').classList.add('reveal-element')
+    // hide personal cards
+    document.getElementById('cards-wrapper').classList.add('hide-element')
+}
+
+
+// view change
+function showPlayerCards() {
+
+    console.log('View change: showing player cards now')
+    document.getElementById('submitted-cards-wrapper').classList.remove('reveal-element')
+    document.getElementById('cards-wrapper').classList.remove('hide-element')
+}
 
 
 
@@ -428,8 +452,7 @@ async function submitThisCard(submitButton) {
 
 
     // move to submissions view - on submit click
-    console.log('View change: submitted cards')
-    document.getElementById('content-wrapper').classList.add('submissions-on-top')
+    showSubmissions()
 
 
 

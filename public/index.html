@@ -31,37 +31,34 @@
   </header>
 
   <div id="content-wrapper">
+    <div id="judge-card" class="card">
 
-    <div id="cards-wrapper" class="cards-container">
+      <div class="judge-wrapper">
+        <h2><label for="people">Judge:</label></h2>
 
-      <div class="card judge-card">
-
-        <div class="judge-wrapper">
-          <h2><label for="people">Judge:</label></h2>
-
-          <select id="select" class="current-judge" onchange="changeJudgeName(event)" id="people">
-            <option>Parker</option>
-            <option>Betsy</option>
-            <option>Ryan</option>
-            <option>Kyle</option>
-            <option>Bryan</option>
-            <option>James</option>
-            <option>Beth</option>
-            <option>Angel</option>
-          </select>
-        </div>
-
-        <div class="line"></div>
-        <p id="judge-card-content">We're fetching the content right now!</p>
+        <select id="select" class="current-judge" onchange="changeJudgeName(event)" id="people">
+          <option>Parker</option>
+          <option>Betsy</option>
+          <option>Ryan</option>
+          <option>Kyle</option>
+          <option>Bryan</option>
+          <option>James</option>
+          <option>Beth</option>
+          <option>Angel</option>
+        </select>
       </div>
 
+      <div class="line"></div>
+      <p id="judge-card-content">We're fetching the content right now!</p>
+      <button onclick="userIsJudge()" class="user-is-judge">I'm the Judge!</button>
     </div>
-
 
     <div id="submitted-cards-wrapper">
       <h2>Submitted Cards:</h2>
       <div id="submitted-cards" class="cards-container"></div>
     </div>
+
+    <div id="cards-wrapper" class="cards-container"></div>
 
   </div>
 
