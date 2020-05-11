@@ -1,0 +1,161 @@
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+  }
+
+  .header {
+    overflow: auto;
+    background-color: #f9c2c2;
+    box-shadow: 0 0 17px 3px #9c5151;
+    /* flex below */
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .header h1 {
+    text-align: center;
+  }
+
+
+  .delete-button {
+    background: #eb0d0d;
+    color: #fff;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    /* width: max-content; */
+    /* height: 35px; */
+    padding: 5px;
+    border-radius: 5px;
+    margin-left: 263px;
+  }
+
+  .delete-button:hover {
+    cursor: pointer;
+  }
+
+
+  .delete-button:active {
+    transform: scale(.8)
+  }
+
+  /* grabbed from here: https://fdossena.com/?p=html5cool/buttons/i.frag */
+  button {
+    display: inline-block;
+    border: 0.16em solid rgba(255, 255, 255, 0);
+    border-radius: 1em;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #FFFFFF;
+    text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+    text-align: center;
+    transition: all 0.2s;
+    font-size: 17px;
+    padding: 6px;
+    margin: 2px
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+
+  button:active {
+    border: solid white;
+  }
+
+  .green-btn {
+    background-color: green;
+  }
+
+  .recycle-btn {
+    background-color: red;
+    /* hidden dev tool */
+    display: none;
+  }
+
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+
+  .dev-tools-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dev-tools-btn {
+    background-color: orange;
+  }
+
+  .judge-card-updater {
+    background-color: #2196F3;
+    /* hidden dev tool */
+    display: none;
+  }
+
+
+
+  /* cards styles */
+
+  #cards-wrapper {
+    margin-top: 30px;
+    /* flexbox below */
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+
+  .card {
+    width: 300px;
+    margin: 10px;
+    border-radius: 20px;
+    border-top-right-radius: 5px;
+    box-shadow: 2px 2px 5px 3px rgba(105, 7, 7, 0.25), 7px 9px 20px 6px rgba(119, 109, 109, 0.22);
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .judge-card {
+    background-color: black;
+    color: white;
+  }
+
+  .judge-card h2 {
+    margin: 10px 0;
+    margin-right: 10px;
+    display: inline-block;
+  }
+
+  .card p {
+    margin: 5px 10px;
+    font-size: 30px;
+    text-align: left;
+  }
+
+  .line {
+    height: 2px;
+    width: 100%;
+    background-color: white;
+  }
+
+  .current-judge {
+    display: inline-block;
+    font-size: 20px;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .content-wrapper {
+      margin: 0 20%;
+    }
+  }
