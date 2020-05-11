@@ -9,6 +9,7 @@ little app for family taskmaster
 
 ## Writing Data
 - When writing, you can give documents specific names, but if you'd rather a [random serialization](https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document), use ```.add()``` rather than ```.doc().set()```. Behind the scenes, these are equivilent, but the latter lets you initialize a document in your code without necessarily having to write to it immediately.
+- ```.set()``` will overwrite any already existing data.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
 - **doc.update() is not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request. 
 
@@ -35,9 +36,35 @@ Caution:
 - Initially, Firebase prevents all read and write actions, but you can change those [rules](https://firebase.google.com/docs/firestore/security/get-started#allow-all) to let anyone read and write. This is bad practice outside of production, but fine for now.
 
 
-
-
-
 ## Misc.
 - Field names are case sensitive, so respect them when calling from you code as a document property.
 - Firebase uses **Optimistic Updates**, so if you're updating a value in your app which is also rendered there, Firestore will employ a form of latency compensation. By using a realtime listener, it updates independent of a server callback, assuming the send will complete.
+
+
+# Examples
+
+## Changing documents from inside a loop
+
+This is batched as best practice, but here, we're interested in the obscure access of documents from within loops. Declaring collection paths and accessing those collections as objects is recommended for loops because, now, we're able to identify any document using custom query criteria. This approach is made especially useful since Firestore doesn't allow ```!=``` (for reasons to do with an internal index and database speed).
+
+*Collections which have been called cannot be read as collection paths.*
+
+**Example:**
+```js
+// trash used cards
+
+    let collectionPath = db.collection('submittedCards')
+    let submittedCollection = await collectionPath.get()
+
+    let batch = db.batch()
+    submittedCollection.forEach(submission => {
+
+        // if card is not collection preserver, delete it
+        if (submission.id != 'preserveCollection') {
+            batch.delete(collectionPath.doc(submission.id))        
+        }
+
+    })
+    await batch.commit()
+
+```

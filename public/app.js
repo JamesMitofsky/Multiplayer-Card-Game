@@ -69,6 +69,7 @@ async function dealCard(numOfCards) {
         // create submit button element
         let submitButton = document.createElement('button')
         submitButton.classList.add('submit-btn')
+        submitButton.setAttribute('onclick', 'submitThisCard(this)')
         submitButton.innerText = 'Submit!'
 
         // add data to the card wrapper
@@ -101,15 +102,14 @@ async function dealCard(numOfCards) {
 
 // called by HTML 'x' element which lives on every card
 function deleteCard(element) {
-    console.log('Detected: delete click!')
-
-    // get card text
-    let cardText = element.nextElementSibling.textContent
 
     element.parentElement.remove()
 
+    
+    console.log('This card has been deleted:', element.parentElement)
 
-    // deal new card when you delete one
+
+    // indicate we want one card dealt
     let numOfCards = 1
     dealCard(numOfCards)
 
@@ -217,12 +217,15 @@ async function updateJudgeCard() {
         changeCardCount(number, incrementorLocation)
 
 
-
-
         // finally, move this card to the used group
         judgeCards.doc(card.id).update({
             isUsed: true
         })
+
+
+        // delete all player submissions
+        deletePlayerSubmissions(db)
+
     })
 }
 
@@ -344,9 +347,54 @@ function getAdjudicator() {
 
 
 
+// called by submit button click
+async function submitThisCard(submitButton) {
+
+    // get submission text
+    let cardContent = submitButton.previousElementSibling.innerText
+
+    
+    // send this submission to the server
+    const db = firebase.firestore();
+    let submittedCollection = db.collection('submittedCards')
+
+    submittedCollection.add({
+        submitted_content: cardContent
+    })
+
+    // after submitting, delete the card
+    deleteCard(submitButton)
+
+    // deleteCard(cardElement)
 
 
+    // finally, load the element which displays all new cards
 
+
+}
+
+// delete all player submissions
+async function deletePlayerSubmissions(db) {
+
+    let collectionPath = db.collection('submittedCards')
+    let submittedCollection = await collectionPath.get()
+
+
+    // trash used cards
+    let batch = db.batch()
+    submittedCollection.forEach(submission => {
+
+        // if card is not collection preserver, delete it
+        if (submission.id != 'preserveCollection') {
+            batch.delete(collectionPath.doc(submission.id))        
+        }
+
+    })
+    await batch.commit()
+
+    console.log('All player submissions have been deleted.')
+
+}
 
 
 
