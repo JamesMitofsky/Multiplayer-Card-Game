@@ -254,7 +254,7 @@ function showSubmissions() {
     // show submissions
     document.getElementById('submitted-cards-wrapper').classList.add('reveal-element')
     // hide personal cards
-    document.getElementById('cards-wrapper').classList.add('hide-element')
+    document.getElementById('local-cards-wrapper').classList.add('hide-element')
 }
 
 
@@ -263,7 +263,7 @@ function showPlayerCards() {
 
     console.log('View change: showing player cards now')
     document.getElementById('submitted-cards-wrapper').classList.remove('reveal-element')
-    document.getElementById('cards-wrapper').classList.remove('hide-element')
+    document.getElementById('local-cards-wrapper').classList.remove('hide-element')
 }
 
 

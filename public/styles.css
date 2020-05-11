@@ -214,9 +214,9 @@ button:active {
 
 
 /* Misc styles: */
-#submitted-cards-wrapper h2 {
+h2 {
     text-align: center;
-    margin    : 35px 0;
+    margin    : 24px 0;
 }
 
 .card p {
