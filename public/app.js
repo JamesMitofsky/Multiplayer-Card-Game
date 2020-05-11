@@ -6,7 +6,12 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // grab card from database
     currentJudgeCard()
 
+    // check for state change of current judge
     getAdjudicator()
+
+    // auto deal 5 cards
+    let numOfCards = 5
+    dealCard(numOfCards)
 
 
 
@@ -16,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
 
 // gets cards which haven't yet been used
-async function dealCard() {
+async function dealCard(numOfCards) {
 
 
     // open database
@@ -28,14 +33,16 @@ async function dealCard() {
     await cardsRemaining(incrementorPath, cardCollectionPath)
 
 
-    // limit the query so we only get one card
-    let query = cardCollectionPath.where('isUsed', '==', false).limit(1)
-    // await retrieving all cards
+    // limit the query to get the right number of cards
+    let query = cardCollectionPath.where('isUsed', '==', false).limit(numOfCards)
     let cards = await query.get()
 
 
+    // TODO: batch this
+    let batch = db.batch()
 
-    cards.forEach(card => {
+    // create HTML element for each document received
+    cards.forEach(async (card) => {
 
         // grab data from this card
         data = card.data();
@@ -66,9 +73,11 @@ async function dealCard() {
         // push to the DOM
         document.getElementById('cards-wrapper').appendChild(cardElement)
 
-        cardCollectionPath.doc(card.id).update({
-            isUsed: true
-        })
+
+
+        let pathOfThisCard = cardCollectionPath.doc(card.id)
+        
+        batch.update(pathOfThisCard, {'isUsed': true })
 
         // assign location and plus minus value
         changeCardCount(1, incrementorPath)
@@ -77,6 +86,8 @@ async function dealCard() {
 
 
     })
+    
+    await batch.commit()
 
 }
 
