@@ -50,8 +50,13 @@
 
       <div class="line"></div>
       <p id="judge-card-content">We're fetching the content right now!</p>
-      <button onclick="userIsJudge()" class="user-is-judge">I'm the Judge!</button>
+      <div class="judge-card-btns">
+        <button id="judge-card-btn" onclick="updateJudgeCard()">New Round</button><button onclick="userIsJudge()" class="user-is-judge">I'm the Judge!</button>
+      </div>
     </div>
+
+    
+    <div class="dotted-line"></div>
 
     <div id="submitted-cards-wrapper">
       <h2>Submitted Cards:</h2>
@@ -70,7 +75,6 @@
     <button class="dev-tools-btn" onclick='devTools()'>Dev Tools</button>
     <button class="recycle-btn" id="recycle-btn" onclick='recycleAllCards(null, null, this )'>Recycle All
       Cards</button>
-    <button class="judge-card-updater" id="judge-card-btn" onclick="updateJudgeCard()">Update Judge Card</button>
 
   </div>
 

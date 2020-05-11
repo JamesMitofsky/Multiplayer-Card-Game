@@ -74,7 +74,7 @@ async function dealCard(numOfCards) {
         let submitButton = document.createElement('button')
         submitButton.classList.add('submit-btn')
         submitButton.setAttribute('onclick', 'submitThisCard(this)')
-        submitButton.innerText = 'Submit!'
+        submitButton.innerText = 'Submit'
 
         // add data to the card wrapper
         cardElement.appendChild(deleteButton)
@@ -210,15 +210,15 @@ async function updateJudgeCard() {
     // start loop to access document
     dbCards.forEach(card => {
 
-        // temp console log
-        console.log('Local request for a new judge card:', card.data().content)
 
 
+       
         // copy card's content to the single doc which transiently holds this active content
         let judgeCardContent = card.data().content
         judgeCards.doc('currentJudgeCard').set({
             active_judgeCard: judgeCardContent
         })
+        console.log('New judge card assigned in Firestore.')
 
 
         // increment current active judge card counter
@@ -227,7 +227,7 @@ async function updateJudgeCard() {
         changeCardCount(number, incrementorLocation)
 
 
-        // finally, move this card to the used group
+        // mark used to prevent repeat access
         judgeCards.doc(card.id).update({
             isUsed: true
         })
@@ -310,14 +310,6 @@ function devTools() {
         recycleBtn.style.display = 'block'
     } else {
         recycleBtn.style.display = 'none'
-    }
-
-    // handle judge card button
-    let judgeCardBtn = document.getElementById('judge-card-btn')
-    if (judgeCardBtn.style.display == 'none') {
-        judgeCardBtn.style.display = 'block'
-    } else {
-        judgeCardBtn.style.display = 'none'
     }
 
 
@@ -406,7 +398,7 @@ function listenForSubmitted() {
 
 
 
-// send latest submission to the app
+// show latest submission locally in the HTML
 function renderSubmission(submittedContentFromServer) {
 
 
@@ -480,11 +472,13 @@ async function deletePlayerSubmissions(db) {
 
 
 
+    // TODO: add listener for when to clear submissions
+    // listener can be in form of == evaluation where if db judge card != html judge card, change
     // also delete submissions from the browser
     let submissionContainer = document.getElementById('submitted-cards')
     submissionContainer.innerHTML = ''
 
-    console.log('All player submissions have been deleted.')
+    console.log('Player submissions deleted: database & local')
 
 }
 
