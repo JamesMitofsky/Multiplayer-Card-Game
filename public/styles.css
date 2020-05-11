@@ -110,6 +110,7 @@ button:active {
 
 
 .dev-tools-wrapper {
+    display        : none !important;
     width          : 100%;
     display        : flex;
     justify-content: space-between;
