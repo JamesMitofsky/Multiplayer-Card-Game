@@ -10,9 +10,10 @@ little app for family taskmaster
 
 ## Read & Write Data
 - When writing, you can give documents specific names, but if you'd rather a [random serialization](https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document), use ```.add()``` rather than ```.doc().set()```. Behind the scenes, these are equivilent, but the latter lets you initialize a document in your code without necessarily having to write to it immediately.
-- ```.set()``` will overwrite any already existing data.
+- Inherently, ```.set()``` will create a document or overwrite pre-existing data, but this latter overwriting feature can be disabled by passing ```{merge: true}``` as an argument following the assignment parameter.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
-- ```doc.update()``` is **not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request. 
+- ```doc.update()``` is **not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request.
+- **Update if doesn't exist:** 
 
 
 ### Batching
@@ -25,14 +26,14 @@ little app for family taskmaster
 
 ### Queries
 - All queries to locate by evaluation are done with ```.where()``` and must be followed by ```.get()``` to contact the server. This second method returns a promise, so be sure to await it.
-- Only the documents containing a specific field can be accessed using the ```.orderBy()``` method.
+- Documents which only contian a specific field can be accessed by passing the field name to the ```.orderBy()``` method.
 
 
 - **Order by time:** You can access timestamp documents using Firebase's internal clock by invoking ```firebase.firestore.FieldValue.serverTimestamp()```. Then, you can serve the most recently added document through ```.orderBy('TIME_FIELD_NAME', desc)```. This is especially powerful when paired with ```.limit(1)```, serving up only the very most recent change.
     - Be warned, though! The serverTimestamp takes a moment to run, meaning any snapshot listening to that data will run twice! Explanation from [Stack Overflow](https://stackoverflow.com/questions/49972173/firestore-onsnapshot-executing-twice).
 
 ### Collections
-- Will not continue to exist if empty. There must always be at least one document, in the same way each document must always have at least one field.
+- Will not continue to exist if empty. There must always be at least one document, but document do seem able to exist without field content.
 
 
 ## Firestore Permissions

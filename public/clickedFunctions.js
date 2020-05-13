@@ -125,6 +125,29 @@ function toggleDevTools(devButton) {
 
 
 // Dev tool --> clear players click
-function clearPlayers() {
+async function clearPlayers() {
+
+    // get players path
+    let db = firebase.firestore()
+    let batch = db.batch()
+
+    // TODO: attach .where(room_name == CURRENT_ROOM) to allow for scalability
+    let playerPath = db.collection('activePlayers')
+    let playerCollection = await playerPath.get()
+
+    // slate players for deletion
+    playerCollection.forEach(player => {
+
+        // leave one document to keep collection alive
+        if (player.id == 'collectionPreserver') { return }
+        batch.delete(playerPath.doc(player.id))
+    })
+
+    // delete players
+    await batch.commit()
+
+
+
+    // TODO: now reveal main page again so people can resubmit their names
 
 }
