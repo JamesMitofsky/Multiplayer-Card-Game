@@ -209,3 +209,18 @@ async function resetGame() {
         isGameStarted: false
     })
 }
+
+// deletes the parent of the given element
+function deleteCard(element) {
+
+    element.parentElement.remove()
+
+
+    console.log('This card has been deleted:', element.parentElement)
+
+
+    // indicate we want one card dealt
+    let numOfCards = 1
+    dealCard(numOfCards)
+
+}

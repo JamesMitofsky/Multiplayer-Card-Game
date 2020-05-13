@@ -147,32 +147,15 @@ function allowNameSubmission() {
 
 
 
-// deletes the parent of the given element
-function deleteCard(element) {
 
-    element.parentElement.remove()
-
-
-    console.log('This card has been deleted:', element.parentElement)
-
-
-    // indicate we want one card dealt
-    let numOfCards = 1
-    dealCard(numOfCards)
-
-}
-
-
-
-
-// resets incrementors
+// resets incrementors - triggered by no remaining cards or manually
 async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
 
 
     // access the database
     const db = firebase.firestore();
 
-    // if called from HTML click, know it's recycling
+    // override recycle location if manually called from HTML
     if (typeof (element) != 'undefined' && element != null) {
         console.log('Recycle Function Called Manually')
         incrementorPath = db.collection('incrementors').doc('playerCardsIncrementor')
