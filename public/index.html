@@ -31,7 +31,12 @@
     <h1>Relative Insanity!</h1>
   </header>
 
-  <div id="content-wrapper">
+  <section class="player-name-wrapper">
+    <input id="player-name" type="text" placeholder="Username">
+    <button onclick="submitPlayerName()">Submit</button>
+  </section>
+
+  <section id="content-wrapper">
     <div id="judge-card" class="card">
 
       <div class="judge-wrapper">
@@ -82,7 +87,7 @@
     <button class="dev-action" onclick='recycleAllCards(null, null, this )'>Recycle All
       Cards</button>
 
-  </div>
+    </section>
 
 
 

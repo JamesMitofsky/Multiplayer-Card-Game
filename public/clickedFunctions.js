@@ -124,6 +124,28 @@ function toggleDevTools(devButton) {
 
 
 
+async function submitPlayerName() {
+
+    // get name
+    let localPlayer = document.getElementById('player-name').value
+
+
+    // call server
+    let db = firebase.firestore()
+    let playerDirectory = db.collection('activePlayers')
+
+    // add player to server --> using merge since this may be first invocation
+    playerDirectory.add({
+        name: localPlayer
+    })
+
+    // record name in local storage
+    localStorage.setItem('name', localPlayer)
+
+}
+
+
+
 // Dev tool --> clear players click
 async function clearPlayers() {
 

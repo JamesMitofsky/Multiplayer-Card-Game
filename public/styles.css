@@ -24,6 +24,15 @@ body {
 }
 
 
+/* player name */
+.player-name-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+
+
 
 
 /* button styles */
