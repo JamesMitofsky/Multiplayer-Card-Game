@@ -46,7 +46,7 @@ little app for family taskmaster
 - Field names are case sensitive, so respect them when calling from you code as a document property.
 
 **Local value updates**
-- Firebase uses *Optimistic Updates*, so if you're changing a variable from inside your app which is also visible there, Firestore will employ a form of latency compensation. By using a realtime listener, it updates independent from and earlier than the server, not requiring a callback since it assumes the send will complete.
+- Firebase uses *Optimistic Updates*, so if you're changing a variable from inside your app which is also visible there, Firestore will employ a form of latency compensation. By using a realtime listener, it updates independent from and earlier than the server, not requiring a callback since it assumes the send will complete. However, I think this can be disabled simply by awaiting the promise of a change.
 
 **Tracking total number of documents**
 - Counting every record is possible but may needlessly consume read events. Instead, consider implimenting an [incrementor document](https://firebase.googleblog.com/2019/03/increment-server-side-cloud-firestore.html) which solely serves to track the total number of docs.

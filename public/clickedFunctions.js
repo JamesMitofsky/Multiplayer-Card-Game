@@ -13,17 +13,12 @@ async function updateJudgeCard() {
     await cardsRemaining(incrementorPath, judgeCards)
 
 
-
-
     // on click, get new judge card --> write document ID to incrementor list so we can read that to everyone
     let dbCards = await judgeCards.where('isUsed', '==', false).limit(1).get()
     // start loop to access document
-    dbCards.forEach(card => {
+    dbCards.forEach(async card => {
 
-
-
-
-        // copy card's content to the single doc which transiently holds this active content
+        // copy card's content to the single doc which transiently holds this active content (this way it can be pushed to all devices later)
         let judgeCardContent = card.data().content
         judgeCards.doc('currentJudgeCard').set({
             active_judgeCard: judgeCardContent
@@ -31,7 +26,7 @@ async function updateJudgeCard() {
         console.log('New judge card assigned in Firestore.')
 
 
-        // increment current active judge card counter
+        // increment active judgeCard counter
         let number = 1
         let incrementorLocation = db.collection('incrementors').doc('judgeCardsIncrementor')
         changeCardCount(number, incrementorLocation)
@@ -41,9 +36,6 @@ async function updateJudgeCard() {
         judgeCards.doc(card.id).update({
             isUsed: true
         })
-
-
-
     })
 }
 
@@ -126,10 +118,9 @@ function toggleDevTools(devButton) {
 
 async function submitPlayerName() {
 
-    // get name
+    // get name at time of submit
     let localPlayer = document.getElementById('player-name').value
-
-    // REQUIRE user to submit name
+    // if blank value, don't continue
     if (localPlayer == '') { return false }
 
     // call server
@@ -141,8 +132,11 @@ async function submitPlayerName() {
         name: localPlayer
     })
 
+    console.log('new name')
+
     // record name in local storage
     localStorage.setItem('name', localPlayer)
+
 
     enterWaitingRoom()
 }
@@ -173,13 +167,16 @@ function enterWaitingRoom() {
 
 }
 
-
+// hits server --> forcing change across devices
 function beginGame() {
-    // view change
-    let waitingRoom = document.getElementById('waiting-room')
-    waitingRoom.classList.add('hide-element')
-    let content = document.getElementById('content-wrapper')
-    content.classList.remove('hide-element')
+
+    // open database
+    const db = firebase.firestore();
+
+    // set game as active
+    db.collection('incrementors').doc('gameBegun').set({
+        isGameStarted: true
+    })
 
 }
 
@@ -187,7 +184,7 @@ function beginGame() {
 
 
 // Dev tool --> clear players click
-async function clearPlayers() {
+async function resetGame() {
 
     // get players path
     let db = firebase.firestore()
@@ -208,8 +205,7 @@ async function clearPlayers() {
     // delete players
     await batch.commit()
 
-
-
-    // TODO: now reveal main page again so people can resubmit their names
-
+    let gameStatus = await db.collection('incrementors').doc('gameBegun').set({
+        isGameStarted: false
+    })
 }

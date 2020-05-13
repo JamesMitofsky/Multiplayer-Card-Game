@@ -1,21 +1,15 @@
 document.addEventListener("DOMContentLoaded", async (event) => {
 
 
-    // grab card from database
-    listenToJudgeCard()
+    // Snapshot functions
+    serverUpdateJudgeCard()
+    serverUpdateJudge()
+    serverGameStatus()
+    serverSubmittedCards()
 
-    // check for state change of current judge
-    listenToJudge()
-
-    // auto deal 5 cards
+    // deal 5 cards on page load
     let numOfCards = 5
     dealCard(numOfCards)
-
-
-    // listen for submitted cards
-    listenForSubmitted()
-
-
 
 
 });
@@ -100,6 +94,65 @@ async function dealCard(numOfCards) {
 }
 
 
+function serverGameStatus() {
+
+    let db = firebase.firestore()
+    let statusPath = db.collection("incrementors").doc('gameBegun')
+
+    // filter which documents we're listening to
+    statusPath
+        // listening for game start
+        .onSnapshot(doc => {
+
+            let gameStarted = doc.data().isGameStarted
+
+            // view change: game started
+            if (gameStarted) {
+
+                // show game
+                let content = document.getElementById('content-wrapper')
+                content.classList.remove('hide-element')
+                // hide nameForm & waitingRoom
+                let newPlayerContainer = document.getElementById('new-player-container')
+                newPlayerContainer.classList.add('hide-element')
+
+
+
+                // view change: game not begun
+            } else {
+
+
+                console.log('Game closed')
+                // delete locally stored name
+                localStorage.removeItem('name')
+
+
+                // hide game
+                let content = document.getElementById('content-wrapper')
+                content.classList.add('hide-element')
+                // show nameForm & waitingRoom
+                let newPlayerContainer = document.getElementById('new-player-container')
+                newPlayerContainer.classList.remove('hide-element')
+
+                allowNameSubmission()
+
+            }
+        });
+}
+
+
+function allowNameSubmission() {
+
+    // show name submission form
+    let nameForm = document.getElementById('name-form')
+    nameForm.classList.remove('hide-element')
+    // hide waiting room
+    let waitingRoom = document.getElementById('waiting-room')
+    waitingRoom.classList.add('hide-element')
+}
+
+
+
 
 // deletes the parent of the given element
 function deleteCard(element) {
@@ -161,7 +214,7 @@ async function recycleAllCards(incrementorPath, cardCollectionPath, element) {
 
 
 // purely listens to database for new card
-async function listenToJudgeCard() {
+async function serverUpdateJudgeCard() {
 
     // open database
     const db = firebase.firestore();
@@ -250,7 +303,7 @@ function changeJudgeName(e) {
 }
 
 
-function listenToJudge() {
+function serverUpdateJudge() {
 
     // open database
     const db = firebase.firestore();
@@ -287,7 +340,7 @@ function listenToJudge() {
 }
 
 
-function listenForSubmitted() {
+function serverSubmittedCards() {
     // open database
     const db = firebase.firestore();
     const submittedCards = db.collection('submittedCards');

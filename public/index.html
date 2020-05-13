@@ -31,9 +31,10 @@
     <h1>Relative Insanity!</h1>
   </header>
 
-  <section id="player-name-wrapper">
+  <section id="new-player-container">
     <div id="name-form">
-      <input id="player-name" type="text" placeholder="Username">
+      <label for="player-name">Name:</label>
+      <input id="player-name" type="text" placeholder="ex. Chris Pratt">
       <button onclick="submitPlayerName()" class="submit-btn">Submit</button>
     </div>
     <div id="waiting-room" class="hide-element">
@@ -90,7 +91,7 @@
     <div class="dev-tools-wrapper">
 
       <button id='dev-tools-btn' onclick='toggleDevTools(this)'>Dev Tools</button>
-      <button class="dev-action" onclick="clearPlayers()">Clear Players</button>
+      <button class="dev-action" onclick="resetGame()">Reset Game</button>
       <button class="dev-action" onclick='recycleAllCards(null, null, this )'>Recycle All
         Cards</button>
 
