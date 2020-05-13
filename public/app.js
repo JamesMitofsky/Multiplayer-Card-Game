@@ -34,9 +34,7 @@ async function dealCard(numOfCards) {
     let cards = await query.get()
 
 
-    // TODO: batch this
     let batch = db.batch()
-
     // create HTML element for each document received
     cards.forEach(async (card) => {
 
@@ -106,34 +104,29 @@ function serverGameStatus() {
 
             let gameStarted = doc.data().isGameStarted
 
-            // view change: game started
+            
             if (gameStarted) {
 
-                // show game
+                // // view change: show game & hide new-user-menu
                 let content = document.getElementById('content-wrapper')
                 content.classList.remove('hide-element')
-                // hide nameForm & waitingRoom
                 let newPlayerContainer = document.getElementById('new-player-container')
                 newPlayerContainer.classList.add('hide-element')
 
 
-
-                // view change: game not begun
+                
             } else {
 
-
-                console.log('Game closed')
                 // delete locally stored name
                 localStorage.removeItem('name')
 
-
-                // hide game
+                // view change: hides game & shows new-user-menu
                 let content = document.getElementById('content-wrapper')
                 content.classList.add('hide-element')
-                // show nameForm & waitingRoom
                 let newPlayerContainer = document.getElementById('new-player-container')
                 newPlayerContainer.classList.remove('hide-element')
 
+                // show submit new user & hide start btn
                 allowNameSubmission()
 
             }
@@ -412,11 +405,7 @@ async function deletePlayerSubmissions(db) {
     })
     await batch.commit()
 
-
-
-    // TODO: add listener for when to clear submissions
-    // listener can be in form of == evaluation where if db judge card != html judge card, change
-    // also delete submissions from the browser
+    // delete all submitted cards
     let submissionContainer = document.getElementById('submitted-cards')
     submissionContainer.innerHTML = ''
 
