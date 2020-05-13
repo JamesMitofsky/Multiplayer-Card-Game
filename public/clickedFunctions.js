@@ -148,13 +148,10 @@ async function submitPlayerName() {
 }
 
 function enterWaitingRoom() {
-    // hide submission form
-    let submitForm = document.getElementById('name-form')
-    submitForm.classList.add('hide-element')
 
     // apply local name to greetings
     let name = localStorage.getItem('name')
-    let greetingPrefixes = [`Howdy, ${name}!`, `What’s kicking, ${name}?`, `Howdy-doody, ${name}!`, `Hey there, ${name}!`, `Hi, ${name}!`, `Ahoy, ${name}!`, `Hiya, ${name}`, `Top of the morning to ya, ${name}!`, ` What’s cracka lackin', ${name}?`, `GOOOOOD MORNING ${name}!`, `Wassup, ${name}?`, `*Ring, ring* Progresso. Call for ${name}`, `Yo, ${name}!`, `Whaddup, ${name}?`, `Greetings and salutations, ${name}.`, `‘Ello, ${name}.`, `Hiiiii, ${name}!`, `Yoooouhoooo! Fancy seeing you here, ${name}.`, `How you doin’ ${name}?`, `Que pasa, ${name}!`, `Bonjour monsieur ${name}!`, `Good day, ${name}!`, `Whatcha up to, ${name}?`, `Yo ${name}, where ya been?`, `What’s sizzling, ${name}?`, `Comment allez-vous, mon ami, ${name}?`, `Como estas, ${name}?`, `How farest thou, ${name}?`, `How is life sailing, ${name}?`]
+    let greetingPrefixes = [`Howdy, ${name}!`, `What’s kicking, ${name}?`, `Howdy-doody, ${name}!`, `Hey there, ${name}!`, `Hi, ${name}!`, `Ahoy, ${name}!`, `Hiya, ${name}`, `Top of the morning to ya, ${name}!`, ` What’s crack'a lackin', ${name}?`, `GOOOOOD MORNING ${name}!`, `Wassup, ${name}?`, `*Ring, ring* Progresso. Call for ${name}`, `Yo, ${name}!`, `Whaddup, ${name}?`, `Greetings and salutations, ${name}.`, `‘Ello, ${name}.`, `Hiiiii, ${name}!`, `Yoooouhoooo! Fancy seeing you here, ${name}.`, `How you doin’ ${name}?`, `Que pasa, ${name}!`, `Bonjour monsieur ${name}!`, `Good day, ${name}!`, `Whatcha up to, ${name}?`, `Yo ${name}, where ya been?`, `What’s sizzling, ${name}?`, `Comment allez-vous, mon ami, ${name}?`, `Como estas, ${name}?`, `How farest thou, ${name}?`, `How is life sailing, ${name}?`]
 
     // get random number for greeting index
     min = Math.ceil(0);
@@ -163,9 +160,16 @@ function enterWaitingRoom() {
     let randomGreeting = greetingPrefixes[randomNum]
 
     // add greeting card
-    let greetingElem = document.createElement('h2')
+    let greetingElem = document.getElementById('greeting')
     greetingElem.innerText = randomGreeting
-    document.getElementById('player-name-wrapper').appendChild(greetingElem)
+
+
+    // view change: hide submission form
+    let submitForm = document.getElementById('name-form')
+    submitForm.classList.add('hide-element')
+    // show waiting room
+    let waitingRoom = document.getElementById('waiting-room')
+    waitingRoom.classList.remove('hide-element')
 
 }
 
