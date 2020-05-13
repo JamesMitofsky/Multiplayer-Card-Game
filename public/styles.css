@@ -74,13 +74,18 @@ button:active {
     border: .16em solid white;
 }
 
-.recycle-btn {
+.dev-action {
     background-color: red;
     display         : none;
 }
 
+.dev-tools-wrapper {
+    width          : 100%;
+    display        : flex;
+    justify-content: space-between;
+}
 
-.dev-tools-btn {
+#dev-tools-btn {
     background-color: orange;
 }
 
@@ -106,14 +111,6 @@ button:active {
 
 .judge-wrapper {
     flex-direction: column;
-}
-
-
-.dev-tools-wrapper {
-    display        : none !important;
-    width          : 100%;
-    display        : flex;
-    justify-content: space-between;
 }
 
 

@@ -99,13 +99,32 @@ function showSubmissions() {
 
 
 // reveals custom dev tools --> dev btn click
-function devTools() {
+function toggleDevTools(devButton) {
 
-    // handle recycle button
-    let recycleBtn = document.getElementById('recycle-btn')
-    if (recycleBtn.style.display == 'none') {
-        recycleBtn.style.display = 'block'
-    } else {
-        recycleBtn.style.display = 'none'
-    }
+
+
+    // getting siblings according to this super interesting article: https://gomakethings.com/an-es6-way-to-get-all-sibling-elements-with-vanilla-js/
+    Array.prototype.filter.call(devButton.parentNode.children, function (sibling) {
+
+        // if the dev button, skip this iteration
+        if (sibling == devButton) { return }
+
+
+        // make the style immediately understandable to if-statement
+        let computedStyle = window.getComputedStyle(sibling, null).display
+
+        if (computedStyle == 'none') {
+            sibling.style.display = 'block'
+        } else {
+            sibling.style.display = 'none'
+        }
+    });
+}
+
+
+
+
+// Dev tool --> clear players click
+function clearPlayers() {
+
 }
