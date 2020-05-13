@@ -174,6 +174,16 @@ function enterWaitingRoom() {
 }
 
 
+function beginGame() {
+    // view change
+    let waitingRoom = document.getElementById('waiting-room')
+    waitingRoom.classList.add('hide-element')
+    let content = document.getElementById('content-wrapper')
+    content.classList.remove('hide-element')
+
+}
+
+
 
 
 // Dev tool --> clear players click

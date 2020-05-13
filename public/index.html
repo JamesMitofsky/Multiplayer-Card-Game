@@ -34,14 +34,16 @@
   <section id="player-name-wrapper">
     <div id="name-form">
       <input id="player-name" type="text" placeholder="Username">
-      <button onclick="submitPlayerName()">Submit</button>
+      <button onclick="submitPlayerName()" class="submit-btn">Submit</button>
     </div>
     <div id="waiting-room" class="hide-element">
       <h2 id="greeting"></h2>
+      <p>When everyone has joined, feel free to start!</p>
+      <button onclick="beginGame()" class="submit-btn">Begin Game!</button>
     </div>
   </section>
 
-  <section id="content-wrapper">
+  <section id="content-wrapper" class="hide-element">
     <div id="judge-card" class="card">
 
       <div class="judge-wrapper">
