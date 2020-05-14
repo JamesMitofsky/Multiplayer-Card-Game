@@ -258,27 +258,6 @@ function changeCardCount(number, incrementorLocation) {
 
 
 
-
-
-// send local value out to server
-function changeJudgeName(e) {
-
-    // open database
-    const db = firebase.firestore();
-
-    // make sure cards are available
-    let currentJudge = db.collection('incrementors').doc('currentJudge')
-
-
-    currentJudge.update({
-        current_judge: e.target.value
-    })
-
-    console.log('Sent out judge name change')
-
-}
-
-
 function serverUpdateJudge() {
 
     // open database
