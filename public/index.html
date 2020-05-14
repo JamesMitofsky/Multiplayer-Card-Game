@@ -48,24 +48,14 @@
     <div id="judge-card" class="card">
 
       <div class="judge-wrapper">
-        <h2><label for="people">Judge:</label></h2>
-
-        <select id="select" class="current-judge" onchange="changeJudgeName(event)" id="people">
-          <option>Parker</option>
-          <option>Betsy</option>
-          <option>Ryan</option>
-          <option>Kyle</option>
-          <option>Bryan</option>
-          <option>James</option>
-          <option>Beth</option>
-          <option>Angel</option>
-        </select>
+        <h2>Judge:</h2>
+        <h2 id="judge-name"></h2>
       </div>
 
       <div class="line"></div>
       <p id="judge-card-content">We're fetching the content right now!</p>
       <div class="judge-card-btns">
-        <button id="judge-card-btn" onclick="updateJudgeCard()">New Round</button><button onclick="userIsJudge()"
+        <button id="judge-card-btn" onclick="newRound()">New Round</button><button onclick="userIsJudge()"
           class="user-is-judge">I'm the Judge!</button>
       </div>
     </div>

@@ -13,7 +13,8 @@ little app for family taskmaster
 - Inherently, ```.set()``` will create a document or overwrite pre-existing data, but this latter overwriting feature can be disabled by passing ```{merge: true}``` as an argument following the assignment parameter.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
 - ```doc.update()``` is **not a function**: Since (I think) you can't iterate these returned objects, the workaround I've been using is access a collection, then get the current **document id** of the loop, and plug that in as the doc field of your query. From there, you can run a normal update request.
-- **Update if doesn't exist:** 
+- **Update if doesn't exist:** {merge: true}
+- It's very important to await functions as you call them, even if you're awaiting all of the server calls inside any given function.
 
 
 ### Batching

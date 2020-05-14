@@ -104,7 +104,7 @@ function serverGameStatus() {
 
             let gameStarted = doc.data().isGameStarted
 
-            
+
             if (gameStarted) {
 
                 // // view change: show game & hide new-user-menu
@@ -114,7 +114,7 @@ function serverGameStatus() {
                 newPlayerContainer.classList.add('hide-element')
 
 
-                
+
             } else {
 
                 // delete locally stored name
@@ -283,37 +283,23 @@ function serverUpdateJudge() {
 
     // open database
     const db = firebase.firestore();
-    const judgeCards = db.collection('incrementors');
+    let currentJudgePath = db.collection('activePlayers').doc('currentJudge');
 
 
-    judgeCards.doc('currentJudge')
-        .onSnapshot(function (doc) {
+    // filter which documents we're listening to
+    currentJudgePath
+        .onSnapshot(doc => {
 
-            let serverIndicatedJudge = doc.data().current_judge
-            console.log('Current judge indicated by server:', serverIndicatedJudge)
-
-            // document.getElementById('judge-card-content').innerText = activeCard
-
-
+            let judgeName = doc.data().current_judge
+            
+            document.getElementById('judge-name').innerText = judgeName
 
 
-            // read about this HTML select solution here: https://thisinterestsme.com/change-select-option-javascript/
-            let selectElement = document.getElementById('select');
-
-            let selectOptions = selectElement.options
-
-            for (var opt, j = 0; opt = selectOptions[j]; j++) {
-                //If the option of value is equal to the option we want to select.
-                if (opt.value == serverIndicatedJudge) {
-                    //Select the option and break out of the for loop.
-                    selectElement.selectedIndex = j;
-                    break;
-                }
-            }
+        });
 
 
-        })
 }
+
 
 
 function serverSubmittedCards() {
@@ -335,8 +321,6 @@ function serverSubmittedCards() {
                 renderSubmission(newCardFromServer)
 
             })
-
-
         })
 }
 

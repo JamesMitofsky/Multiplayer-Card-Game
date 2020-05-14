@@ -1,7 +1,9 @@
 
 // button click: actively retrieves new card
-async function updateJudgeCard() {
+async function newRound() {
 
+    // tell server to choose new judge
+    setJudge()
 
     // open database
     const db = firebase.firestore();
@@ -18,18 +20,16 @@ async function updateJudgeCard() {
     // start loop to access document
     dbCards.forEach(async card => {
 
-        // copy card's content to the single doc which transiently holds this active content (this way it can be pushed to all devices later)
+        // push this card to server, which will then trigger update across devices
         let judgeCardContent = card.data().content
         judgeCards.doc('currentJudgeCard').set({
             active_judgeCard: judgeCardContent
         })
-        console.log('New judge card assigned in Firestore.')
 
 
         // increment active judgeCard counter
-        let number = 1
-        let incrementorLocation = db.collection('incrementors').doc('judgeCardsIncrementor')
-        changeCardCount(number, incrementorLocation)
+        let incNum = 1
+        changeCardCount(incNum, incrementorPath)
 
 
         // mark used to prevent repeat access
@@ -55,12 +55,14 @@ async function submitThisCard(submitButton) {
     const db = firebase.firestore();
     let submittedCollection = db.collection('submittedCards')
 
+
     submittedCollection.add({
         submitted_content: cardContent,
+        // timestamp lets cards be served to devices in order they arrive
         timestamp: new Date().getTime()
     })
 
-    // after submitting, delete the card
+    // after submitting, delete card from HTML
     deleteCard(submitButton)
 
 
@@ -81,7 +83,7 @@ function userIsJudge() {
 
 // view change --> called by judge-btn & submit-btn
 function showSubmissions() {
-    console.log('View change: submitted cards')
+
     // show submissions
     document.getElementById('submitted-cards-wrapper').classList.add('reveal-element')
     // hide personal cards
@@ -92,7 +94,6 @@ function showSubmissions() {
 
 // reveals custom dev tools --> dev btn click
 function toggleDevTools(devButton) {
-
 
 
     // getting siblings according to this super interesting article: https://gomakethings.com/an-es6-way-to-get-all-sibling-elements-with-vanilla-js/
@@ -129,7 +130,8 @@ async function submitPlayerName() {
 
     // add player to server --> using merge since this may be first invocation
     playerDirectory.add({
-        name: localPlayer
+        name: localPlayer,
+        waitingTurn: true
     })
 
     console.log('new name')
@@ -177,6 +179,61 @@ function beginGame() {
     db.collection('incrementors').doc('gameBegun').set({
         isGameStarted: true
     })
+
+}
+
+
+// call on new round click
+async function setJudge() {
+    // access server
+    let db = firebase.firestore()
+    let playersDirectory = db.collection('activePlayers')
+
+    // get one user who hasn't been judge yet
+    let waitingPlayer = await playersDirectory.where('waitingTurn', '==', true).limit(1).get()
+
+
+    if (waitingPlayer.size == 0) {
+        await resetWaitingPlayers(db, playersDirectory)
+
+        // call new most recent player
+        waitingPlayer = await playersDirectory.where('waitingTurn', '==', true).limit(1).get()
+    }
+
+
+    waitingPlayer.forEach(player => {
+
+        // update judge in server
+        let playerName = player.data().name
+        playersDirectory.doc('currentJudge').set({
+            current_judge: playerName
+        })
+
+        console.log('new judge:', playerName)
+
+        // mark player no longer waiting
+        playersDirectory.doc(player.id).update({
+            waitingTurn: false
+        })
+    })
+}
+
+async function resetWaitingPlayers(db, playersDirectory) {
+
+    let allPlayers = await playersDirectory.where('waitingTurn', '==', false).get()
+
+    let batch = db.batch()
+
+    // all players now waiting to be judge
+    allPlayers.forEach(player => {
+        batch.update(playersDirectory.doc(player.id), {
+            waitingTurn: true
+        })
+        console.log('hit')
+    })
+
+    await batch.commit()
+
 
 }
 
