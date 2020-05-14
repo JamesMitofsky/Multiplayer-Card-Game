@@ -32,19 +32,27 @@
   </header>
 
   <section id="new-player-container">
+
     <div id="name-form">
+
       <label for="player-name">Name:</label>
       <input id="player-name" type="text" placeholder="ex. Chris Pratt">
       <button onclick="submitPlayerName()" class="submit-btn">Submit</button>
+
     </div>
+
     <div id="waiting-room" class="hide-element">
+
       <h2 id="greeting"></h2>
       <p>When everyone has joined, feel free to start!</p>
       <button onclick="beginGame()" class="submit-btn">Begin Game!</button>
+      
     </div>
+
   </section>
 
   <section id="content-wrapper" class="hide-element">
+
     <div id="judge-card" class="card">
 
       <div class="judge-wrapper">
@@ -54,10 +62,12 @@
 
       <div class="line"></div>
       <p id="judge-card-content">We're fetching the content right now!</p>
+
       <div class="judge-card-btns">
         <button id="judge-card-btn" onclick="newRound()">New Round</button><button onclick="userIsJudge()"
           class="user-is-judge">I'm the Judge!</button>
       </div>
+
     </div>
 
 
