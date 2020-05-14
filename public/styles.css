@@ -133,9 +133,7 @@ button:active {
 
 
 /* javascript applied styles */
-.reveal-element {
-    display: block !important;
-}
+
 
 .hide-element {
     display: none !important;

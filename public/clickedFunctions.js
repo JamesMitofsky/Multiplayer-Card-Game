@@ -4,7 +4,6 @@ async function newRound() {
 
     // tell server to choose new judge
     await setJudge()
-    await userIsJudge()
 
     // open database
     const db = firebase.firestore();
@@ -72,13 +71,6 @@ async function submitThisCard(submitButton) {
 
 }
 
-
-
-
-// user is judge --> judge-btn click
-function userIsJudge() {
-    showSubmissions()
-}
 
 
 
@@ -167,7 +159,6 @@ function enterWaitingRoom() {
     // show waiting room
     let waitingRoom = document.getElementById('waiting-room')
     waitingRoom.classList.remove('hide-element')
-
 }
 
 // hits server --> forcing change across devices
@@ -189,7 +180,7 @@ function beginGame() {
 
 
 
-// call on new round click
+// call on new round click & beginGame()
 async function setJudge() {
     // access server
     let db = firebase.firestore()
@@ -198,15 +189,15 @@ async function setJudge() {
     // get one user who hasn't been judge yet
     let waitingPlayer = await playersDirectory.where('waitingTurn', '==', true).limit(1).get()
 
-
+    // if all the players have been judges, reset their status
     if (waitingPlayer.size == 0) {
         await resetWaitingPlayers(db, playersDirectory)
 
-        // call new most recent player
+        // create a new call for a waiting player
         waitingPlayer = await playersDirectory.where('waitingTurn', '==', true).limit(1).get()
     }
 
-
+    // get player to be judge from server
     waitingPlayer.forEach(player => {
 
         // update judge in server
@@ -215,33 +206,41 @@ async function setJudge() {
             current_judge: playerName
         })
 
-        console.log('new judge:', playerName)
+        console.log('Judge pushed to server:', playerName)
 
         // mark player no longer waiting
         playersDirectory.doc(player.id).update({
             waitingTurn: false
         })
     })
+
 }
 
 
-// call this at game start and new round btn clicks
+// local eval, not click though
+// view change if user is Judge
 async function userIsJudge() {
 
     // get judge name from server
     let db = firebase.firestore()
-    let judgeDoc = await db.collection('activePlayers').doc('currentJudge').get()
-    let judgeName = judgeDoc.data().current_judge
+    let judgePath = db.collection('activePlayers').doc('currentJudge')
 
+
+    let judgeDoc = await judgePath.get()
+    let judgeName = judgeDoc.data().current_judge
     // get local name
     let localName = localStorage.getItem('name')
+
 
     // end function if names don't match
     if (localName != judgeName) { return false }
 
-    console.log('proof')
+    console.log('user is judge')
 
+    // show submitted cards page
+    // showSubmissions()
 
+    
 
 
 
@@ -262,7 +261,6 @@ async function resetWaitingPlayers(db, playersDirectory) {
         batch.update(playersDirectory.doc(player.id), {
             waitingTurn: true
         })
-        console.log('hit')
     })
 
     await batch.commit()
@@ -278,17 +276,16 @@ async function resetGame() {
     let db = firebase.firestore()
     let batch = db.batch()
 
-
     // TODO: attach .where(room_name == CURRENT_ROOM) to allow for scalability
     let playerPath = db.collection('activePlayers')
     let playerCollection = await playerPath.get()
-
 
     // slate players for deletion
     playerCollection.forEach(player => {
 
         // leave one document to keep collection alive
-        if (player.id == 'collectionPreserver') { return }
+        // replacing preserver with currentJudge doc
+        if (player.id == 'currentJudge') { return }
         batch.delete(playerPath.doc(player.id))
     })
     // delete players
@@ -303,7 +300,11 @@ async function resetGame() {
 
     // delete current judge on game end
     let judgePath = db.collection('activePlayers').doc('currentJudge')
-    await judgePath.delete()
+
+    await judgePath.update({
+        current_judge: ''
+    })
+    
 
 
 }

@@ -100,7 +100,7 @@ function serverGameStatus() {
     // filter which documents we're listening to
     statusPath
         // listening for game start
-        .onSnapshot(doc => {
+        .onSnapshot(async doc => {
 
             let gameStarted = doc.data().isGameStarted
 
@@ -112,6 +112,9 @@ function serverGameStatus() {
                 content.classList.remove('hide-element')
                 let newPlayerContainer = document.getElementById('new-player-container')
                 newPlayerContainer.classList.add('hide-element')
+
+                // move this further up
+                await userIsJudge()
 
 
 
@@ -127,14 +130,14 @@ function serverGameStatus() {
                 newPlayerContainer.classList.remove('hide-element')
 
                 // show submit new user & hide start btn
-                allowNameSubmission()
+                showNameSubmission()
 
             }
         });
 }
 
 
-function allowNameSubmission() {
+function showNameSubmission() {
 
     // show name submission form
     let nameForm = document.getElementById('name-form')
@@ -205,8 +208,7 @@ async function serverUpdateJudgeCard() {
             console.log('Judge-Card updated:', activeCard)
             document.getElementById('judge-card-content').innerText = activeCard
 
-            // return to main view
-            console.log('View change: personal deck')
+            // return to personal deck view
             showPlayerCards()
 
             // delete all player submissions
@@ -218,7 +220,7 @@ async function serverUpdateJudgeCard() {
 
 // view change --> called by server listener
 function showPlayerCards() {
-    console.log('View change: showing player cards now')
+
     document.getElementById('submitted-cards-wrapper').classList.remove('reveal-element')
     document.getElementById('local-cards-wrapper').classList.remove('hide-element')
 }
@@ -258,19 +260,23 @@ function changeCardCount(number, incrementorLocation) {
 
 
 
-function serverUpdateJudge() {
+async function serverUpdateJudge() {
 
     // open database
     const db = firebase.firestore();
     let currentJudgePath = db.collection('activePlayers').doc('currentJudge');
 
 
+    // TODO: sometimes this card won't exist
     // filter which documents we're listening to
     currentJudgePath
         .onSnapshot(doc => {
 
             let judgeName = doc.data().current_judge
-            
+
+            console.log('mark')
+            console.log(judgeName)
+
             document.getElementById('judge-name').innerText = judgeName
 
 
