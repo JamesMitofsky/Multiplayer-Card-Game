@@ -3,7 +3,8 @@
 async function newRound() {
 
     // tell server to choose new judge
-    setJudge()
+    await setJudge()
+    await userIsJudge()
 
     // open database
     const db = firebase.firestore();
@@ -185,6 +186,9 @@ function beginGame() {
 }
 
 
+
+
+
 // call on new round click
 async function setJudge() {
     // access server
@@ -220,6 +224,33 @@ async function setJudge() {
     })
 }
 
+
+// call this at game start and new round btn clicks
+async function userIsJudge() {
+
+    // get judge name from server
+    let db = firebase.firestore()
+    let judgeDoc = await db.collection('activePlayers').doc('currentJudge').get()
+    let judgeName = judgeDoc.data().current_judge
+
+    // get local name
+    let localName = localStorage.getItem('name')
+
+    // end function if names don't match
+    if (localName != judgeName) { return false }
+
+    console.log('proof')
+
+
+
+
+
+}
+
+
+
+
+
 async function resetWaitingPlayers(db, playersDirectory) {
 
     let allPlayers = await playersDirectory.where('waitingTurn', '==', false).get()
@@ -235,8 +266,6 @@ async function resetWaitingPlayers(db, playersDirectory) {
     })
 
     await batch.commit()
-
-
 }
 
 
@@ -249,9 +278,11 @@ async function resetGame() {
     let db = firebase.firestore()
     let batch = db.batch()
 
+
     // TODO: attach .where(room_name == CURRENT_ROOM) to allow for scalability
     let playerPath = db.collection('activePlayers')
     let playerCollection = await playerPath.get()
+
 
     // slate players for deletion
     playerCollection.forEach(player => {
@@ -260,23 +291,27 @@ async function resetGame() {
         if (player.id == 'collectionPreserver') { return }
         batch.delete(playerPath.doc(player.id))
     })
-
     // delete players
     await batch.commit()
 
+
+    // set game status as ended
     let gameStatus = await db.collection('incrementors').doc('gameBegun').set({
         isGameStarted: false
     })
+
+
+    // delete current judge on game end
+    let judgePath = db.collection('activePlayers').doc('currentJudge')
+    await judgePath.delete()
+
+
 }
 
 // deletes the parent of the given element
 function deleteCard(element) {
 
     element.parentElement.remove()
-
-
-    console.log('This card has been deleted:', element.parentElement)
-
 
     // indicate we want one card dealt
     let numOfCards = 1
