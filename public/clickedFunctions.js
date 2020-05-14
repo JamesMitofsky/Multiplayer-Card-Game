@@ -172,6 +172,8 @@ function enterWaitingRoom() {
 // hits server --> forcing change across devices
 function beginGame() {
 
+    setJudge()
+
     // open database
     const db = firebase.firestore();
 
