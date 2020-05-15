@@ -36,7 +36,7 @@
     <div id="name-form">
 
       <label for="player-name">Name:</label>
-      <input id="player-name" type="text" placeholder="ex. Chris Pratt">
+      <input onkeyup="submitNameByEnterKey(event)" id="player-name" type="text" placeholder="ex. Chris Pratt">
       <button onclick="submitPlayerName()" class="submit-btn">Submit</button>
 
     </div>

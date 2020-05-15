@@ -99,6 +99,13 @@ function toggleDevTools(devButton) {
 
 
 
+function submitNameByEnterKey(event) {
+    // if enter key pressed, submit player name
+    if (event.keyCode === 13) {
+        submitPlayerName()
+    }
+}
+
 
 async function submitPlayerName() {
 
