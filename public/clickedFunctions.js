@@ -67,21 +67,11 @@ async function submitThisCard(submitButton) {
 
 
     // move to submissions view - on submit click
-    showSubmissions()
+    showSubmittedCards()
 
 }
 
 
-
-
-// view change --> called by judge-btn & submit-btn
-function showSubmissions() {
-
-    // show submissions
-    document.getElementById('submitted-cards-wrapper').classList.add('reveal-element')
-    // hide personal cards
-    document.getElementById('local-cards-wrapper').classList.add('hide-element')
-}
 
 
 
@@ -127,7 +117,6 @@ async function submitPlayerName() {
         waitingTurn: true
     })
 
-    console.log('new name')
 
     // record name in local storage
     localStorage.setItem('name', localPlayer)
@@ -153,15 +142,11 @@ function enterWaitingRoom() {
     greetingElem.innerText = randomGreeting
 
 
-    // view change: hide submission form
-    let submitForm = document.getElementById('name-form')
-    submitForm.classList.add('hide-element')
-    // show waiting room
-    let waitingRoom = document.getElementById('waiting-room')
-    waitingRoom.classList.remove('hide-element')
+    // view change: pre-game
+    waitingRoomView()
 }
 
-// hits server --> forcing change across devices
+// button click server --> forcing change across devices
 function beginGame() {
 
     setJudge()
@@ -219,31 +204,20 @@ async function setJudge() {
 
 // local eval, not click though
 // view change if user is Judge
-async function userIsJudge() {
+async function isUserJudge(serverProvidedName) {
 
-    // get judge name from server
-    let db = firebase.firestore()
-    let judgePath = db.collection('activePlayers').doc('currentJudge')
-
-
-    let judgeDoc = await judgePath.get()
-    let judgeName = judgeDoc.data().current_judge
     // get local name
     let localName = localStorage.getItem('name')
 
+    // if user not judge, don't change view
+    if (localName != serverProvidedName) { return false }
 
-    // end function if names don't match
-    if (localName != judgeName) { return false }
-
-    console.log('user is judge')
+    console.log(`Server indicates this user, ${localName}, is the judge.`)
 
     // show submitted cards page
-    // showSubmissions()
+    showSubmittedCards()
 
-    
-
-
-
+    return true
 }
 
 
@@ -292,20 +266,24 @@ async function resetGame() {
     await batch.commit()
 
 
-    // set game status as ended
+     // delete current judge on game end
+     let judgePath = db.collection('activePlayers').doc('currentJudge')
+
+     await judgePath.update({
+         current_judge: ''
+     })
+
+
+    // set game status as ended --> do this last to set correct view trigger
     let gameStatus = await db.collection('incrementors').doc('gameBegun').set({
         isGameStarted: false
     })
 
 
-    // delete current judge on game end
-    let judgePath = db.collection('activePlayers').doc('currentJudge')
+    // clear local storage
+    localStorage.removeItem('name')
 
-    await judgePath.update({
-        current_judge: ''
-    })
-    
-
+    console.log('Local game reset.')
 
 }
 

@@ -41,37 +41,43 @@
 
     </div>
 
-    <div id="waiting-room" class="hide-element">
+    <div id="waiting-room">
 
       <h2 id="greeting"></h2>
       <p>When everyone has joined, feel free to start!</p>
       <button onclick="beginGame()" class="submit-btn">Begin Game!</button>
-      
+
     </div>
 
   </section>
 
-  <section id="content-wrapper" class="hide-element">
+  <section id="content-wrapper">
 
-    <div id="judge-card" class="card">
+    <div id="judge-card-wrapper">
+      <div id="judge-card" class="card">
 
-      <div class="judge-wrapper">
-        <h2>Judge:</h2>
-        <h2 id="judge-name"></h2>
+        <div class="judge-name-wrapper">
+          <h2>Judge:</h2>
+          <h2 id="judge-name"></h2>
+        </div>
+
+        <div class="line"></div>
+        <p id="judge-card-content">We're fetching the content right now!</p>
+
+        <div class="judge-card-btns">
+          <button id="judge-card-btn" onclick="newRound()">New Round</button>
+
+          <!-- <button onclick="userIsJudge()"
+            class="user-is-judge">I'm the Judge!</button> -->
+
+        </div>
+
       </div>
 
-      <div class="line"></div>
-      <p id="judge-card-content">We're fetching the content right now!</p>
-
-      <div class="judge-card-btns">
-        <button id="judge-card-btn" onclick="newRound()">New Round</button><button onclick="userIsJudge()"
-          class="user-is-judge">I'm the Judge!</button>
-      </div>
-
+      <div class="dotted-line"></div>
     </div>
 
 
-    <div class="dotted-line"></div>
 
     <div id="submitted-cards-wrapper">
       <h2>Submitted Cards:</h2>
@@ -103,7 +109,7 @@
   <!-- <button onclick="googleLogin()">
         Login with Google
       </button> -->
-
+  <script src='views.js'></script>
   <script src="clickedFunctions.js"></script>
   <script src="app.js"></script>
 </body>

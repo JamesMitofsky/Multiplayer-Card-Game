@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     // Snapshot functions
     serverUpdateJudgeCard()
     serverUpdateJudge()
-    serverGameStatus()
     serverSubmittedCards()
+    serverGameStatus()
 
     // deal 5 cards on page load
     let numOfCards = 5
@@ -107,16 +107,19 @@ function serverGameStatus() {
 
             if (gameStarted) {
 
-                // // view change: show game & hide new-user-menu
-                let content = document.getElementById('content-wrapper')
-                content.classList.remove('hide-element')
-                let newPlayerContainer = document.getElementById('new-player-container')
-                newPlayerContainer.classList.add('hide-element')
+                // if user is judge, show judge view
+                let currentJudgePath = await db.collection('activePlayers').doc('currentJudge').get();
+                let judgeName = currentJudgePath.data().current_judge
+                let userIsJudge = await isUserJudge(judgeName)
 
-                // move this further up
-                await userIsJudge()
+                
+                if (!userIsJudge) {
+                    // return to personal deck view
+                    showMainGame()
+                }
 
-
+                // view change: show game & hide new-user-menu
+                console.log('Game status: started')
 
             } else {
 
@@ -124,29 +127,11 @@ function serverGameStatus() {
                 localStorage.removeItem('name')
 
                 // view change: hides game & shows new-user-menu
-                let content = document.getElementById('content-wrapper')
-                content.classList.add('hide-element')
-                let newPlayerContainer = document.getElementById('new-player-container')
-                newPlayerContainer.classList.remove('hide-element')
-
-                // show submit new user & hide start btn
-                showNameSubmission()
-
+                console.log('Game status: ended')
+                newUserView()
             }
         });
 }
-
-
-function showNameSubmission() {
-
-    // show name submission form
-    let nameForm = document.getElementById('name-form')
-    nameForm.classList.remove('hide-element')
-    // hide waiting room
-    let waitingRoom = document.getElementById('waiting-room')
-    waitingRoom.classList.add('hide-element')
-}
-
 
 
 
@@ -208,21 +193,10 @@ async function serverUpdateJudgeCard() {
             console.log('Judge-Card updated:', activeCard)
             document.getElementById('judge-card-content').innerText = activeCard
 
-            // return to personal deck view
-            showPlayerCards()
-
             // delete all player submissions
             deletePlayerSubmissions(db)
 
         })
-}
-
-
-// view change --> called by server listener
-function showPlayerCards() {
-
-    document.getElementById('submitted-cards-wrapper').classList.remove('reveal-element')
-    document.getElementById('local-cards-wrapper').classList.remove('hide-element')
 }
 
 
@@ -239,6 +213,7 @@ async function cardsRemaining(incrementorPath, cardCollectionPath) {
     let totalDocs = data.total_cards
     console.log(totalDocs - currentlyUsed, "cards before deck recycle")
 
+    // TODO: replace this with .size to save writes
     // if the total exceeds or matches the total number of saved docs, reset
     if (currentlyUsed >= totalDocs) {
         await recycleAllCards(incrementorPath, cardCollectionPath)
@@ -270,17 +245,24 @@ async function serverUpdateJudge() {
     // TODO: sometimes this card won't exist
     // filter which documents we're listening to
     currentJudgePath
-        .onSnapshot(doc => {
+        .onSnapshot(async doc => {
 
             let judgeName = doc.data().current_judge
 
-            console.log('mark')
-            console.log(judgeName)
-
             document.getElementById('judge-name').innerText = judgeName
+
+            // if user is judge, update view
+            let userIsJudge = await isUserJudge(judgeName)
+
+            if (!userIsJudge) {
+                // return to personal deck view
+                showMainGame()
+            }
 
 
         });
+
+
 
 
 }
@@ -751,13 +733,9 @@ async function countCards() {
     const db = firebase.firestore();
     const allCards = db.collection('playerCards');
 
-    console.log('proof')
-
     let query = allCards.where('isUsed', '==', true)
     // await retrieving all cards
     let cards = await query.get()
-
-    console.log(cards.size)
 }
 
 

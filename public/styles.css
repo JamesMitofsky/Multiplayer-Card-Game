@@ -23,14 +23,6 @@ body {
     text-align: center;
 }
 
-
-/* player name */
-#new-player-container {
-    display: flex;
-    justify-content: center;
-    padding: 15px;
-}
-
 #player-name {
     font-size: 18px;
 }
@@ -122,30 +114,58 @@ button:active {
 /* main content styles */
 
 
-.judge-wrapper {
+.judge-name-wrapper {
     flex-direction: column;
 }
 
 
-#submitted-cards-wrapper {
-    display: none;
+#content-wrapper {
+    display: flex;
+    flex-direction: column;
 }
+
+#new-player-container {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
 
 
 /* javascript applied styles */
-
-
-.hide-element {
-    display: none !important;
+.show-element {
+    display: flex !important;
 }
 
+#name-form {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+}
+
+#waiting-room {
+    display: none;
+    flex-direction: column;
+}
+
+
+#judge-card-wrapper {
+    display: none;
+    flex-direction: column;
+}
+
+/* view: submitted & local cards */
+#submitted-cards-wrapper, #local-cards-wrapper {
+    /* flex */
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+}
 /* end js applied styles */
 
 
-
-
 @media only screen and (min-width: 1200px) {
-    .content-wrapper {
+    #content-wrapper {
         margin: 0 20%;
     }
 }
@@ -155,7 +175,7 @@ button:active {
 /* cards styles */
 
 .cards-container {
-    /* flexbox below */
+    /* display: flex */
     display        : flex;
     justify-content: space-around;
     flex-wrap      : wrap;
