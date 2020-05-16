@@ -92,6 +92,7 @@ button:active {
 
 #dev-tools-btn {
     background-color: orange;
+    display: none;
 }
 
 

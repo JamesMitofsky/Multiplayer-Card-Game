@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     let numOfCards = 5
     dealCard(numOfCards)
 
+    isUserAdmin()
+
 
 });
 
@@ -345,6 +347,23 @@ async function deletePlayerSubmissions(db) {
 
     console.log('Player submissions deleted: database & local')
 
+}
+
+
+function isUserAdmin() {
+    
+    let stringifiedValues = window.location.search
+    let urlParams = new URLSearchParams(stringifiedValues)
+    let accessStatus = urlParams.get('access')
+
+    // show buttons
+    let devButton = document.getElementById('dev-tools-btn')
+
+    if (accessStatus == 'admin') {
+        devButton.style.display = 'block'
+
+        console.log('Admin view included.')
+    }
 }
 
 

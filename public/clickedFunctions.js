@@ -74,9 +74,8 @@ async function submitThisCard(submitButton) {
 
 
 
-
 // reveals custom dev tools --> dev btn click
-function toggleDevTools(devButton) {
+function toggleAdminTools(devButton) {
 
 
     // getting siblings according to this super interesting article: https://gomakethings.com/an-es6-way-to-get-all-sibling-elements-with-vanilla-js/
