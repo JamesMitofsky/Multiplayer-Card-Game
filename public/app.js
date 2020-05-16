@@ -115,6 +115,7 @@ function serverGameStatus() {
                 let userIsJudge = await isUserJudge(judgeName)
 
                 
+                // if user is judge, leave view as judge view
                 if (!userIsJudge) {
                     // return to personal deck view
                     showMainGame()

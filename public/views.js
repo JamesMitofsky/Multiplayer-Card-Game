@@ -1,8 +1,6 @@
 function showMainGame() {
 
-
     hideAllElements()
-
 
     console.log('main game view')
     // shows judge & local cards
@@ -14,10 +12,8 @@ function showMainGame() {
 
 function newUserView() {
 
-
     hideAllElements()
 
-    
     console.log('new user view')
     // show intro screen
     let content = document.getElementById('name-form')
@@ -27,9 +23,7 @@ function newUserView() {
 
 function waitingRoomView() {
 
-
     hideAllElements()
-
     
     console.log('waiting room view')
     // show intro screen
@@ -37,15 +31,23 @@ function waitingRoomView() {
     waitingRoom.classList.add('show-element')
 }
 
+function judgeView() {
+    
 
-// function gameRoom() {
+    hideAllElements()
+    
+    console.log('Judge view')
+    // show new round button
+    let newRoundBtn = document.getElementById('judge-card-btn')
+    newRoundBtn.classList.add('show-element')
 
-//     hideAllElements()
+    // show judge & submitted
+    let judgeCard = document.getElementById('judge-card-wrapper')
+    judgeCard.classList.add('show-element')
+    let submittedCards = document.getElementById('submitted-cards-wrapper')
+    submittedCards.classList.add('show-element')
 
-//     // show intro screen
-//     let judgeCard = document.getElementById('judge-card-wrapper')
-//     judgeCard.classList.add('show-element')
-// }
+}
 
 
 // view change --> called by submit-btn or server says user is judge
@@ -88,6 +90,13 @@ function hideAllElements() {
     let judgeCard = document.getElementById('judge-card-wrapper')
     if (judgeCard) {
         judgeCard.classList.remove('show-element')
+    }
+
+
+    // new round button
+    let newRoundBtn = document.getElementById('judge-card-btn')
+    if (newRoundBtn) {
+        newRoundBtn.classList.remove('show-element')
     }
 
 

@@ -103,8 +103,11 @@ button:active {
 
 /* mark */
 #judge-card-btn {
-    background-color: #2196F3;
-    font-weight     : bolder;
+    display: none;
+    background-color: hsl(0, 100%, 52%);
+    font-weight: bolder;
+    width: fit-content;
+    margin: 8px auto;
 }
 
 .submit-btn {
@@ -242,12 +245,6 @@ button:active {
     color           : white;
     background-color: green;
     font-weight     : bolder;
-}
-
-.judge-card-btns {
-    display        : flex;
-    justify-content: space-around;
-    margin         : 5px;
 }
 
 

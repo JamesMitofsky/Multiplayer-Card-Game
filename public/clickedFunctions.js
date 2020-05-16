@@ -221,7 +221,8 @@ async function isUserJudge(serverProvidedName) {
     console.log(`Server indicates this user, ${localName}, is the judge.`)
 
     // show submitted cards page
-    showSubmittedCards()
+    //TODO: show judge view
+    judgeView()
 
     return true
 }
