@@ -44,8 +44,7 @@
     <div id="waiting-room">
 
       <h2 id="greeting"></h2>
-      <p>When everyone has joined, feel free to start!</p>
-      <button onclick="beginGame()" class="submit-btn">Begin Game!</button>
+      <p>When everyone has joined, the game admin can start the round!</p>
 
     </div>
 
@@ -97,8 +96,9 @@
     <div class="dev-tools-wrapper">
 
       <button id='dev-tools-btn' onclick='toggleAdminTools(this)'>Admin Tools</button>
-      <button class="dev-action" onclick="resetGame()">Reset Game</button>
-      <button class="dev-action" onclick='recycleAllCards(null, null, this )'>Recycle All
+      <button onclick="beginGame()" id="begin-game" class="submit-btn">Begin Game!</button>
+      <button class="reset-game" onclick="resetGame()">Reset Game</button>
+      <button class="recycle-cards" onclick='recycleAllCards(null, null, this )'>Recycle All
         Cards</button>
 
   </section>

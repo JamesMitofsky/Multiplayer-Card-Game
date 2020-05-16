@@ -79,8 +79,13 @@ button:active {
     border: .16em solid white;
 }
 
-.dev-action {
+.reset-game {
     background-color: red;
+    display         : none;
+}
+
+.recycle-cards {
+    background-color: #b300e0;
     display         : none;
 }
 
@@ -110,6 +115,10 @@ button:active {
     align-self      : flex-end;
     margin-bottom   : 8px;
     margin-right    : 8px;
+}
+
+#begin-game {
+    display: none;
 }
 
 /* main content styles */
