@@ -1,10 +1,5 @@
-# Bryan's-Card-Game
+# Cards Against ~~Humanity~~ Covid
 little app for family taskmaster
-
-
-# TODO
-- let users identify themselves on load. Then, dynamically rotate through them as Judge
-- only one card recycle allowed per turn. Hide delete button after one click until submit is pressed
 
 # Things I'm Learning
 
@@ -105,3 +100,8 @@ db.collection("cities").where("state", "==", "CA")
         
     });
 ```
+
+
+# TODO
+- [ ] Let users identify themselves on load. Then, dynamically rotate through them as Judge
+- [ ] Only one card recycle allowed per turn. Hide delete button after one click until submit is pressed
