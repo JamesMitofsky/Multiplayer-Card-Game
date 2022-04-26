@@ -1,9 +1,9 @@
 # Cards Against ~~Humanity~~ Covid
-little app for family taskmaster
+An application to help keep my family in touch during the early pandemic moment. Written using Firebase for live snapshots of user behavior, a game administrator can orchestrate the changing of rounds, keeping score, etc.
 
-# Things I'm Learning
+## Documentation of Learning
 
-## Read & Write Data
+### Read & Write Data
 - When writing, you can give documents specific names, but if you'd rather a [random serialization](https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document), use ```.add()``` rather than ```.doc().set()```. Behind the scenes, these are equivilent, but the latter lets you initialize a document in your code without necessarily having to write to it immediately.
 - Inherently, ```.set()``` will create a document or overwrite pre-existing data, but this latter overwriting feature can be disabled by passing ```{merge: true}``` as an argument following the assignment parameter.
 - Because ```.get()``` returns a promise, we can await that in an async function to avoid unseenly nesting
@@ -12,15 +12,15 @@ little app for family taskmaster
 - It's very important to await functions as you call them, even if you're awaiting all of the server calls inside any given function.
 
 
-### Batching
+#### Batching
 - Why do it? Batching is important to avoid inconsistent data through multiple access points. If two people are trying to reach two data groups which should experience simultanious state changes, batch these to avoid confusion.
 - Caution: This almost goes without saying, but when batching, be sure to declare and call your batch from **outside** of the loop you're saving changes from. Otherwise it will create/call unique instances for each loop, defeating the point of batching.
 
-### Write limit
+#### Write limit
 - If you have to import data before handling normal user requests, it's worth knowing Firestore's free tier is limited to 500 writes per request. Each field edit is considered a write.
 
 
-### Queries
+#### Queries
 - All queries to locate by evaluation are done with ```.where()``` and must be followed by ```.get()``` to contact the server. This second method returns a promise, so be sure to await it.
 - Documents which only contian a specific field can be accessed by passing the field name to the ```.orderBy()``` method.
 
@@ -28,15 +28,15 @@ little app for family taskmaster
 - **Order by time:** You can access timestamp documents using Firebase's internal clock by invoking ```firebase.firestore.FieldValue.serverTimestamp()```. Then, you can serve the most recently added document through ```.orderBy('TIME_FIELD_NAME', desc)```. This is especially powerful when paired with ```.limit(1)```, serving up only the very most recent change.
     - Be warned, though! The serverTimestamp takes a moment to run, meaning any snapshot listening to that data will run twice! Explanation from [Stack Overflow](https://stackoverflow.com/questions/49972173/firestore-onsnapshot-executing-twice).
 
-### Collections
+#### Collections
 - Will not continue to exist if empty. There must always be at least one document, but document do seem able to exist without field content.
 
 
-## Firestore Permissions
+### Firestore Permissions
 - Initially, Firebase prevents all read and write actions, but you can change those [rules](https://firebase.google.com/docs/firestore/security/get-started#allow-all) to let anyone read and write. This is bad practice outside of production, but fine for now.
 
 
-## Misc.
+### Miscellaneous
 
 **Field names**
 - Field names are case sensitive, so respect them when calling from you code as a document property.
@@ -48,9 +48,9 @@ little app for family taskmaster
 - Counting every record is possible but may needlessly consume read events. Instead, consider implimenting an [incrementor document](https://firebase.googleblog.com/2019/03/increment-server-side-cloud-firestore.html) which solely serves to track the total number of docs.
 
 
-# Examples
+## Examples
 
-## Changing documents from inside a loop
+### Changing documents from inside a loop
 
 This example is batched as best practice, but we're really interested in the obscure access of documents from within loops.
 
@@ -80,7 +80,7 @@ async function example() {
 ```
 
 
-## Snapshots
+### Snapshots
 
 Snapshots are listeners applied to the server, executing code when the field(s) targeted change.
 
@@ -102,6 +102,6 @@ db.collection("cities").where("state", "==", "CA")
 ```
 
 
-# TODO
+## TODO
 - [ ] Let users identify themselves on load. Then, dynamically rotate through them as Judge
 - [ ] Only one card recycle allowed per turn. Hide delete button after one click until submit is pressed
